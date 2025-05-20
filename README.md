@@ -4,9 +4,9 @@ This is a custom, rule-based lemmatizer for Scottish Gaelic, built as part of a 
 
 Since Scottish Gaelic is a low-resource language with no official spaCy language model, this lemmatizer is implemented as a **custom pipeline component** using a combination of:
 
-- 🧠 Simple suffix-stripping rules (e.g., for plural and diminutive endings)
-- 📘 A manually curated dictionary of irregular word forms
-- ✅ spaCy's lightweight `blank("xx")` pipeline for token handling
+-  Simple suffix-stripping rules (e.g., for plural and diminutive endings)
+-  A manually curated dictionary of irregular word forms
+-  spaCy's lightweight `blank("xx")` pipeline for token handling
 
 ---
 
