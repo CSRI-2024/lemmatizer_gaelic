@@ -46,13 +46,14 @@ def gaelic_lemmatizer(doc):
 # This list defines common morphological patterns in Scottish Gaelic.
 # Each rule removes or modifies a known suffix to approximate the word's base form.
 # The list is ordered from longest to shortest suffix to avoid incorrect partial matches.
+
 suffix_rules = [
-    ("adairean", lambda w: w[:-8]),          # Agentive plural (e.g., 'teagaisgadairean' → 'teagaisg')
-    ("idhean",   lambda w: w[:-6]),          # Long plural (e.g., 'leabhraichean' → 'leabhar')
+    ("adairean", lambda w: w[:-8]), # Agentive plural (e.g., 'teagaisgadairean' → 'teagaisg')
+    ("idhean",   lambda w: w[:-6]), # Long plural (e.g., 'leabhraichean' → 'leabhar')
     ("achan",    lambda w: w[:-5] + "ach"),  # Diminutive to root (e.g., 'cuimhneachan' → 'cuimhneach')
-    ("ean",      lambda w: w[:-3]),          # Plural suffix (e.g., 'taighean' → 'taigh')
-    ("achd",     lambda w: w[:-4]),          # Abstract noun (e.g., 'càirdeachd' → 'càirde')
-    ("an",       lambda w: w[:-2]),          # Common short plural (e.g., 'leanaban' → 'leanab')
+    ("ean",      lambda w: w[:-3]), # Plural suffix (e.g., 'taighean' → 'taigh')
+    ("achd",     lambda w: w[:-4]), # Abstract noun (e.g., 'càirdeachd' → 'càirde')
+    ("an",       lambda w: w[:-2]), # Common short plural (e.g., 'leanaban' → 'leanab')
 ]
 
 # REGISTER CUSTOM LEMMATIZER
