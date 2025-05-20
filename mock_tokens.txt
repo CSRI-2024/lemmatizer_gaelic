@@ -9,3 +9,6 @@ thàinig
 duineachan
 làithean
 leanaban
+duineachan
+taighean
+cuimhneachan
