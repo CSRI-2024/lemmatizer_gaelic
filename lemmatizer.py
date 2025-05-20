@@ -2,14 +2,14 @@ import spacy
 from spacy.language import Language
 import json
 
-# -------- LOAD IRREGULAR DICTIONARY --------
+# LOAD IRREGULAR DICTIONARY
 with open("irregular_dict.json", "r", encoding="utf-8") as f:
     irregulars = json.load(f)
 
-# -------- CREATE NLP PIPELINE --------
+# CREATE NLP PIPELINE
 nlp = spacy.blank("xx")  # 'xx' is for unsupported languages like Scottish Gaelic
 
-# -------- DEFINE CUSTOM RULE-BASED LEMMATIZER --------
+# DEFINE CUSTOM RULE-BASED LEMMATIZER
 @Language.component("gaelic_lemmatizer")
 def gaelic_lemmatizer(doc):
     for token in doc:
@@ -30,7 +30,7 @@ def gaelic_lemmatizer(doc):
 
     return doc
 
-# -------- DEFINE SUFFIX RULES --------
+# DEFINE SUFFIX RULES
 # Ordered from longest to shortest to avoid partial matches
 suffix_rules = [
     ("adairean", lambda w: w[:-8]),
@@ -41,13 +41,13 @@ suffix_rules = [
     ("an",       lambda w: w[:-2]),
 ]
 
-# -------- REGISTER LEMMATIZER IN PIPELINE --------
+# REGISTER LEMMATIZER IN PIPELINE
 nlp.add_pipe("gaelic_lemmatizer", name="lemmatizer", last=True)
 
-# -------- SET INPUT FILE --------
+# SET INPUT FILE
 input_file = "mock_tokens.txt"  # Switch to "tokenized_corpus.txt" later
 
-# -------- LOAD TOKENS FROM FILE --------
+# LOAD TOKENS FROM FILE
 with open(input_file, "r", encoding="utf-8") as f:
     token_list = [line.strip().lower() for line in f if line.strip()]
 
@@ -55,7 +55,7 @@ with open(input_file, "r", encoding="utf-8") as f:
 text = " ".join(token_list)
 doc = nlp(text)
 
-# -------- PRINT OUTPUT --------
+# PRINT OUTPUT
 print("Token → Lemma")
 print("-" * 20)
 for token in doc:
