@@ -4,6 +4,7 @@ import json
 
 # Load irregular dictionary from JSON
 with open("irregular_dict.json", "r", encoding="utf-8") as f:
+    #encoding="utf-8" represents Unicode characters using one to four 8-bit bytes
     irregulars = json.load(f)
 
 # Create a blank spaCy pipeline (no pretrained language model)
@@ -19,6 +20,7 @@ def gaelic_lemmatizer(doc):
         if text in irregulars:
             token.lemma_ = irregulars[text]
         # Rule-based suffix stripping
+        #Plural Suffixes, Case Suffixes, Gender Suffixes, Derived Nouns/Adjectives
         elif text.endswith("ean"):
             token.lemma_ = text[:-3]
         elif text.endswith("an"):
