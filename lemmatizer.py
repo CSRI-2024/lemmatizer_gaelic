@@ -81,3 +81,10 @@ print("Token → Lemma")
 print("-" * 20)
 for token in doc:
     print(f"{token.text} → {token.lemma_}")
+
+
+# SAVE OUTPUT TO FILE
+with open("lemmatized_output.txt", "w", encoding="utf-8") as out:
+    for token in doc:
+        out.write(f"{token.text}\t{token.lemma_}\n")
+
