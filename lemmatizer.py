@@ -43,6 +43,16 @@ def gaelic_lemmatizer(doc):
         elif text.endswith("achan"):
             token.lemma_ = text[:-5] + "ach"
 
+        elif text.endswith("idhean"):  # long plural
+            token.lemma_ = text[:-6]
+
+        elif text.endswith("achd"):  # nominalization
+            token.lemma_ = text[:-4]
+
+        elif text.endswith("adairean"):  # agentive plural
+            token.lemma_ = text[:-8]
+
+
         # DEFAULT: If no rule or dictionary match, keep the word as-is
         else:
             token.lemma_ = text
@@ -71,3 +81,5 @@ print("Token → Lemma")
 print("-" * 20)
 for token in doc:
     print(f"{token.text} → {token.lemma_}")
+
+
