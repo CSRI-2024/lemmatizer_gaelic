@@ -45,7 +45,7 @@ suffix_rules = [
 nlp.add_pipe("gaelic_lemmatizer", name="lemmatizer", last=True)
 
 # SET INPUT FILE
-input_file = "mock_tokens.txt"  # Switch to "tokenized_corpus.txt" later
+input_file = "mock_tokens.txt"  # Later switching to "tokenized_corpus.txt"
 
 # LOAD TOKENS FROM FILE
 with open(input_file, "r", encoding="utf-8") as f:

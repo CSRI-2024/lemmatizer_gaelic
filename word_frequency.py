@@ -1,15 +1,19 @@
 from collections import Counter
 
-#LOAD TOKENS FROM FILE
-# Currently using mock_tokens.txt (one word per line)
+tokens = []
+
 with open("mock_tokens.txt", "r", encoding="utf-8") as f:
-    # Strip line breaks and lowercase each word
-    tokens = [line.strip().lower() for line in f if line.strip()]
+    for line in f:
+        # Strip whitespace, skip if line is empty
+        line = line.strip()
+        if line:
+            # Split into words, lowercase them, and add to tokens list
+            tokens.extend(word.lower() for word in line.split() if word)
 
 # COUNT WORD FREQUENCIES
 word_counts = Counter(tokens)
 
-# PRINT RESULTS
+# DISPLAY RESULTS
 print("Word → Frequency")
 print("-" * 20)
 for word, freq in word_counts.most_common():
