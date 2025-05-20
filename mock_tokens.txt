@@ -1,8 +1,10 @@
 chunnaic
+bhúr
 chuala
 taighean
 cuimhneachan
 b’
+agus
 math
 chaidh
 thàinig
@@ -12,3 +14,4 @@ leanaban
 duineachan
 taighean
 cuimhneachan
+cúigear
