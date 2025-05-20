@@ -19,9 +19,9 @@ Since Scottish Gaelic is a low-resource language with no official spaCy language
 ---
 
 ##  Project Structure
-lemmatizer_gaelic/
-├── lemmatizer.py # Main script with spaCy pipeline and rules
-├── irregular_dict.json # Dictionary of irregular Gaelic word forms
-├── mock_tokens.txt # Sample word list for testing
-├── README.md # Project documentation
+lemmatizer_gaelic/ \n
+├── lemmatizer.py # Main script with spaCy pipeline and rules \n
+├── irregular_dict.json # Dictionary of irregular Gaelic word forms \n
+├── mock_tokens.txt # Sample word list for testing \n
+├── README.md # Project documentation \n
 
