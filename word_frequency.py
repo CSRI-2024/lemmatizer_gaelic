@@ -1,23 +1,20 @@
 from collections import Counter
-import spacy
 
-# Load a blank spaCy pipeline (for basic tokenization)
-nlp = spacy.blank("xx")
-
-# Read the cleaned corpus text file
+#LOAD TOKENS FROM FILE
+# Currently using mock_tokens.txt (one word per line)
 with open("mock_tokens.txt", "r", encoding="utf-8") as f:
-    text = f.read()
+    # Strip line breaks and lowercase each word
+    tokens = [line.strip().lower() for line in f if line.strip()]
 
-# Process the text with spaCy to split it into tokens
-doc = nlp(text)
+# COUNT WORD FREQUENCIES
+word_counts = Counter(tokens)
 
-# Count word frequencies (skip punctuation/numbers, lowercase for consistency)
-word_counts = Counter(token.text.lower() for token in doc if token.is_alpha)
-
-# Print the 20 most frequent words
+# PRINT RESULTS
 print("Word → Frequency")
 print("-" * 20)
-for word, freq in word_counts.most_common(20):
+for word, freq in word_counts.most_common():
     print(f"{word} → {freq}")
+
+
 
 
