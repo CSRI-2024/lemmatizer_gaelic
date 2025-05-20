@@ -42,18 +42,24 @@ def gaelic_lemmatizer(doc):
 
     return doc  # Return the processed document with updated lemmas
 
-# -------- DEFINE SUFFIX RULES --------
+# DEFINE SUFFIX RULES=
 # This list defines common morphological patterns in Scottish Gaelic.
 # Each rule removes or modifies a known suffix to approximate the word's base form.
-# The list is ordered from longest to shortest suffix to avoid incorrect partial matches.
-
+# Ordered from longest to shortest to prevent partial matches
 suffix_rules = [
-    ("adairean", lambda w: w[:-8]), # Agentive plural (e.g., 'teagaisgadairean' → 'teagaisg')
-    ("idhean",   lambda w: w[:-6]), # Long plural (e.g., 'leabhraichean' → 'leabhar')
-    ("achan",    lambda w: w[:-5] + "ach"),  # Diminutive to root (e.g., 'cuimhneachan' → 'cuimhneach')
-    ("ean",      lambda w: w[:-3]), # Plural suffix (e.g., 'taighean' → 'taigh')
-    ("achd",     lambda w: w[:-4]), # Abstract noun (e.g., 'càirdeachd' → 'càirde')
-    ("an",       lambda w: w[:-2]), # Common short plural (e.g., 'leanaban' → 'leanab')
+    ("adaireachd", lambda w: w[:-10]),      # Agentive abstract
+    ("adairean",   lambda w: w[:-8]),       # Agentive plural
+    ("airean",     lambda w: w[:-7]),       # Alternative plural
+    ("idhean",     lambda w: w[:-6]),       # Long plural
+    ("eanach",     lambda w: w[:-6]),       # Terrain/collective
+    ("rachaidh",   lambda w: w[:-7]),       # Verb future
+    ("achan",      lambda w: w[:-5] + "ach"),# Diminutive
+    ("adaire",     lambda w: w[:-6]),       # Agent noun
+    ("aiche",      lambda w: w[:-5]),       # Abstract adjective
+    ("eachd",      lambda w: w[:-5]),       # Abstract noun
+    ("ean",        lambda w: w[:-3]),       # Regular plural
+    ("achd",       lambda w: w[:-4]),       # Abstract noun
+    ("an",         lambda w: w[:-2]),       # Short plural
 ]
 
 # REGISTER CUSTOM LEMMATIZER
@@ -87,5 +93,4 @@ for token in doc:
 # SAVE OUTPUT TO FILE
 with open("lemmatized_output.txt", "w", encoding="utf-8") as out:
     for token in doc:
-        out.write(f"{token.text}\t{token.lemma_}\n")
-
+        out.write(f"{token.text} -> {token.lemma_}\n")
