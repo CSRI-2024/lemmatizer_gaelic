@@ -1,82 +1,61 @@
-# Import spaCy's core library and Language class for defining custom components
 import spacy
 from spacy.language import Language
-
-# Import json for loading the irregular dictionary
 import json
 
 # -------- LOAD IRREGULAR DICTIONARY --------
-# Open the JSON file containing irregular word → lemma mappings
-# "utf-8" encoding is used to handle special Gaelic characters (e.g., à, è, ò)
 with open("irregular_dict.json", "r", encoding="utf-8") as f:
-    irregulars = json.load(f)  # Load the contents into a Python dictionary
+    irregulars = json.load(f)
 
 # -------- CREATE NLP PIPELINE --------
-# Create a blank spaCy NLP pipeline
-# "xx" is a generic language code for unsupported languages (like Scottish Gaelic)
-nlp = spacy.blank("xx")
+nlp = spacy.blank("xx")  # 'xx' is for unsupported languages like Scottish Gaelic
 
-# -------- DEFINE CUSTOM LEMMATIZER COMPONENT --------
-# Decorate this function as a spaCy pipeline component named "gaelic_lemmatizer"
+# -------- DEFINE CUSTOM RULE-BASED LEMMATIZER --------
 @Language.component("gaelic_lemmatizer")
 def gaelic_lemmatizer(doc):
-    # Loop through each token (word) in the document
     for token in doc:
-        text = token.text  # Get the actual word text
+        text = token.text.lower()
 
-        # FIRST: Check if the word is an irregular form
+        # Check if it's an irregular form
         if text in irregulars:
-            token.lemma_ = irregulars[text]  # Use its known lemma from the dictionary
+            token.lemma_ = irregulars[text]
+            continue
 
-        # SECOND: Apply rule-based suffix stripping if no dictionary match
-        # These rules handle common Gaelic endings (plural, diminutive, etc.)
-
-        # Remove "ean" (common plural ending) → e.g., "taighean" → "taigh"
-        elif text.endswith("ean"):
-            token.lemma_ = text[:-3]
-
-        # Remove "an" (another common plural/inflection ending) → e.g., "leanaban" → "leanab"
-        elif text.endswith("an"):
-            token.lemma_ = text[:-2]
-
-        # Replace "achan" (diminutive suffix) with "ach" → e.g., "cuimhneachan" → "cuimhneach"
-        elif text.endswith("achan"):
-            token.lemma_ = text[:-5] + "ach"
-
-        elif text.endswith("idhean"):  # long plural
-            token.lemma_ = text[:-6]
-
-        elif text.endswith("achd"):  # nominalization
-            token.lemma_ = text[:-4]
-
-        elif text.endswith("adairean"):  # agentive plural
-            token.lemma_ = text[:-8]
-
-
-        # DEFAULT: If no rule or dictionary match, keep the word as-is
+        # Apply suffix-stripping rules (in order of specificity)
+        for suffix, rule in suffix_rules:
+            if text.endswith(suffix):
+                token.lemma_ = rule(text)
+                break
         else:
-            token.lemma_ = text
+            token.lemma_ = text  # Default: return word unchanged
 
-    return doc  # Return the updated document
+    return doc
 
-# -------- ADD LEMMATIZER TO THE PIPELINE --------
-# Register the custom component as the last step in the NLP pipeline
+# -------- DEFINE SUFFIX RULES --------
+# Ordered from longest to shortest to avoid partial matches
+suffix_rules = [
+    ("adairean", lambda w: w[:-8]),
+    ("idhean",   lambda w: w[:-6]),
+    ("achan",    lambda w: w[:-5] + "ach"),
+    ("ean",      lambda w: w[:-3]),
+    ("achd",     lambda w: w[:-4]),
+    ("an",       lambda w: w[:-2]),
+]
+
+# -------- REGISTER LEMMATIZER IN PIPELINE --------
 nlp.add_pipe("gaelic_lemmatizer", name="lemmatizer", last=True)
 
+# -------- SET INPUT FILE --------
+input_file = "mock_tokens.txt"  # Switch to "tokenized_corpus.txt" later
+
 # -------- LOAD TOKENS FROM FILE --------
-# Open a test file with one word per line
-with open("mock_tokens.txt", "r", encoding="utf-8") as f:
-    # Strip whitespace and line breaks from each line and store as a list
-    token_list = [line.strip() for line in f.readlines()]
+with open(input_file, "r", encoding="utf-8") as f:
+    token_list = [line.strip().lower() for line in f if line.strip()]
 
-# Combine tokens into a space-separated string (spaCy expects full text, not a token list)
+# Join tokens into a single string so spaCy can process them
 text = " ".join(token_list)
-
-# Process the text with the spaCy pipeline (includes your custom lemmatizer)
 doc = nlp(text)
 
-# -------- OUTPUT --------
-# Print each token and its corresponding lemma
+# -------- PRINT OUTPUT --------
 print("Token → Lemma")
 print("-" * 20)
 for token in doc:
