@@ -1,7 +1,7 @@
 import spacy
 from spacy.language import Language
 import json
-import os
+
 
 # Load irregular dictionary from JSON
 with open("irregular_dict.json", "r", encoding="utf-8") as f:
