@@ -22,12 +22,12 @@ Because Scottish Gaelic is a low-resource language without an official spaCy mod
 
 ---
 
-## Project Structure
-lemmatizer_gaelic/
-├── lemmatizer.py # Main script: spaCy pipeline, suffix rules, and output
-├── irregular_dict.json # Dictionary of irregular Gaelic word → lemma mappings
-├── mock_tokens.txt # Sample tokenized input (one word per line)
-├── lemmatized_output.txt # Output: token → lemma (generated after running script)
-├── word_frequency.py # (Optional) Script for counting word frequencies
-└── README.md # This documentation
+## Project Structure `
+text lemmatizer_gaelic/
+├── lemmatizer.py # Main script: spaCy pipeline, suffix rules, and output 
+├── irregular_dict.json # Dictionary of irregular Gaelic word → lemma mappings 
+├── mock_tokens.txt # Sample tokenized input (one word per line) 
+├── lemmatized_output.txt # Output: token → lemma (generated after running script) 
+├── word_frequency.py # Counting word frequencies 
+└── README.md # This documentation 
 
