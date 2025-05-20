@@ -17,8 +17,7 @@ def lemmatize(word):
     else:
         return word
 
-
-# Test it with mock tokens
+# Test it with the mock tokens
 with open("mock_tokens.txt", "r") as f:
     tokens = [line.strip() for line in f.readlines()]
 
