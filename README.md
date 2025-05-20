@@ -10,7 +10,7 @@ Since Scottish Gaelic is a low-resource language with no official spaCy language
 
 ---
 
-## 🔧 What This Project Does
+##  What This Project Does
 
 - Loads a list of Gaelic word tokens from a file
 - Applies custom lemmatization rules and dictionary mappings
@@ -18,7 +18,7 @@ Since Scottish Gaelic is a low-resource language with no official spaCy language
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 lemmatizer_gaelic/
 ├── lemmatizer.py # Main script with spaCy pipeline and rules
 ├── irregular_dict.json # Dictionary of irregular Gaelic word forms
