@@ -52,3 +52,5 @@ lemmatizer_gaelic/
 
 4. **Output**  
    Results are saved to `lemmatized_output.txt` in the format:  
+
+**Work on Progress**
