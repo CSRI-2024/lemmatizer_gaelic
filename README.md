@@ -1,33 +1,54 @@
-# Scottish Gaelic Lemmatizer
+# Scottish Gaelic Lemmatizer – CSRI Research Project
 
-This is a custom, rule-based lemmatizer for Scottish Gaelic, developed as part of a collaborative text analysis project with Napier University in Edinburgh. The tool is implemented using the [spaCy](https://spacy.io/) NLP framework and is designed to process a cleaned and tokenized Gaelic corpus.
-
-Because Scottish Gaelic is a low-resource language without an official spaCy model, we use a lightweight custom NLP pipeline (`spacy.blank("xx")`) and integrate:
-
-- A curated dictionary of **irregular word → lemma** mappings
-- A flexible set of **rule-based suffix stripping functions**
-- spaCy's custom pipeline API for efficient lemmatization
+This project is part of an ongoing collaborative research initiative between the Cornell College Computer Science Department and Napier University in Edinburgh, Scotland. The goal is to build tools that enable deeper text analysis for the Scottish Gaelic language — a low-resource language with limited computational tools.
 
 ---
 
-## What This Project Does
+## Project Context
 
-- Loads **tokenized Gaelic words** from a file (e.g. `mock_tokens.txt`)
-- Applies a **custom lemmatizer** that:
-  - Matches irregular forms using `irregular_dict.json`
-  - Applies common suffix-stripping rules (e.g., `"ean" → ""`, `"achan" → "ach"`)
-- Outputs each word and its **lemma** to:
-  - The console
-  - A tab-separated file: `lemmatized_output.txt`
+- **Year 1**: A team of students created a cleaned corpus of Scottish Gaelic text and a tokenizer.
+- **Year 2 (Current)**: Our focus is on developing a rule-based lemmatizer and generating linguistic statistics to support broader Gaelic text analysis.
 
 ---
 
-## Project Structure `
-text lemmatizer_gaelic/
-├── lemmatizer.py # Main script: spaCy pipeline, suffix rules, and output 
-├── irregular_dict.json # Dictionary of irregular Gaelic word → lemma mappings 
-├── mock_tokens.txt # Sample tokenized input (one word per line) 
-├── lemmatized_output.txt # Output: token → lemma (generated after running script) 
-├── word_frequency.py # Counting word frequencies 
-└── README.md # This documentation 
+## What This Tool Does
 
+This lemmatizer reduces inflected Scottish Gaelic word forms to their base forms (**lemmas**) using:
+
+- A **manually curated irregular dictionary** for unpredictable wordforms (e.g., `chunnaic → faic`)
+- A set of **carefully tested suffix rules** for regular morphological patterns (e.g., `taighean → taigh`)
+- Frequency-guided refinement: all rules and dictionary entries are based on analysis of the most common words in the corpus
+- Output in a simple, editable format for future researchers to reuse or expand
+
+---
+
+## Project Structure
+
+lemmatizer_gaelic/
+├── lemmatizer.py # Main lemmatization script using spaCy
+├── irregular_dict.json # Irregular word → lemma mappings
+├── CleanedCorpus.txt # Cleaned and tokenized Gaelic corpus
+├── word_frequency.py # Tool to generate word frequency statistics
+├── stopWords.txt # List of Gaelic stop words (excluded from stats)
+├── lemmatized_output.txt # Final lemma output (token → lemma)
+├── word_frequencies.txt # Top 100 frequent tokens for refinement
+└── README.md # Project documentation
+
+
+---
+
+##  How It Works
+
+1. **Word Frequency Analysis**  
+   Use `word_frequency.py` to generate a ranked list of tokens (excluding stop words).
+
+2. **Manual Review & Rule Creation**  
+   Identify the most common irregular and regular word patterns.
+
+3. **Lemmatization Process (`lemmatizer.py`)**
+   - Matches known irregular forms from `irregular_dict.json`
+   - Applies safe suffix rules to common word endings (e.g., `-ean`, `-anan`, `-in`)
+   - Leaves unmatched tokens unchanged
+
+4. **Output**  
+   Results are saved to `lemmatized_output.txt` in the format:  
