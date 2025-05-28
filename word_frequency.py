@@ -1,7 +1,7 @@
 from collections import defaultdict, Counter
 
 # CONFIG
-corpus_file = "New_Cleaned_Corpus2.txt"
+corpus_file = "Latest_Corpus.txt"
 stop_words_file = "stopWords.txt"
 top_n = 50
 

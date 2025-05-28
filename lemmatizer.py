@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue June 20, 2025
+
+Author: Oskar Diyali
+"""
+
 # Import spaCy to build the NLP pipeline
 import spacy
 from spacy.language import Language
@@ -15,7 +22,6 @@ with open("irregular_dict.json", "r", encoding="utf-8") as f:
 # These rules apply to words that follow regular morphological patterns.
 # Each rule checks for a suffix and transforms the word to its likely lemma.
 # Only a few carefully tested rules are used to avoid over-stemming.
-
 suffix_rules = [
     # Genitive singular → restore base form
     # e.g., "eilein" → "eilean"
@@ -34,13 +40,11 @@ suffix_rules = [
 # Since spaCy does not support Scottish Gaelic directly,
 # we use a blank multilingual ("xx") model.
 nlp = spacy.blank("xx")
-nlp.max_length = 10_000_000  # Allow large inputs
+nlp.max_length = 20_000_000  # Allow large inputs
+
 
 # DEFINE CUSTOM RULE-BASED LEMMATIZER
 # This component replaces spaCy’s default lemmatizer.
-# It follows a two-step process:
-# (1) If the word is in the irregular dictionary, use that mapping.
-# (2) If not, try to apply one of the suffix rules.
 @Language.component("gaelic_lemmatizer")
 def gaelic_lemmatizer(doc):
     for token in doc:
@@ -49,44 +53,45 @@ def gaelic_lemmatizer(doc):
         # Step 1: Check irregular dictionary
         if text in irregulars:
             token.lemma_ = irregulars[text]
-            continue  # Skip to next token
+            continue
 
-        # Step 2: Apply the first matching suffix rule
+        # Step 2: Apply first matching suffix rule
         for suffix, func in suffix_rules:
             if text.endswith(suffix):
                 token.lemma_ = func(text)
-                break  # Stop checking rules after first match
+                break
         else:
-            # Step 3: If no rule applies, keep the word as its own lemma
-            token.lemma_ = text
+            token.lemma_ = text  # Default to unchanged word
 
-    return doc  # Return the processed document
+    return doc
+
 
 # REGISTER CUSTOM LEMMATIZER IN PIPELINE
-# Add the custom lemmatizer to the end of the spaCy pipeline.
-# It will run after tokenization.
 nlp.add_pipe("gaelic_lemmatizer", name="lemmatizer", last=True)
 
-# LOAD TOKENS FROM FILE
-# Read from your cleaned corpus (one token per line).
-# This ensures consistency with your frequency analysis step.
-input_file = "CleanedCorpus.txt"
-tokens = [line.strip().lower() for line in open(input_file, "r", encoding="utf-8") if line.strip()]
+# LOAD TOKENS FROM CORPUS FILE (only first word per line)
+input_file = "Latest_Corpus.txt"  # Contains "word source" lines
+tokens = []
 
-# CONVERT TOKEN LIST TO TEXT FOR spaCy PROCESSING
-# spaCy expects a single string as input.
-# We join the tokens into a space-separated string so spaCy can tokenize and lemmatize it.
+with open(input_file, "r", encoding="utf-8") as f:
+    for line in f:
+        line = line.strip()
+        if not line:
+            continue
+        word = line.split(" ", 1)[0]  # Get only the first word
+        tokens.append(word.lower())
+
+# CONVERT TOKEN LIST TO TEXT FOR spaCy
 text = " ".join(tokens)
-doc = nlp(text)  # Run the NLP pipeline
+doc = nlp(text)
 
-# PRINT LEMMATIZATION RESULTS TO CONSOLE
+# PRINT TO CONSOLE
 print("Token → Lemma")
 print("-" * 20)
 for token in doc:
     print(f"{token.text} → {token.lemma_}")
 
-# SAVE RESULTS TO FILE
-# This creates a text file with each token and its lemma on a separate line.
+# SAVE TO FILE
 with open("lemmatized_output.txt", "w", encoding="utf-8") as out:
     for token in doc:
         out.write(f"{token.text} -> {token.lemma_}\n")
