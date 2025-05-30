@@ -3,7 +3,7 @@ from collections import defaultdict, Counter
 # CONFIG
 corpus_file = "Latest_Corpus.txt"
 stop_words_file = "stopWords.txt"
-top_n = 50
+top_n = 100
 
 # LOAD STOP WORDS
 with open(stop_words_file, "r", encoding="utf-8") as f:

@@ -8,69 +8,92 @@ Author: Oskar Diyali
 # Import spaCy to build the NLP pipeline
 import spacy
 from spacy.language import Language
-
-# Import JSON to read the dictionary of irregular lemmas
 import json
+import re
+
+
+# PREPROCESSING FUNCTION
+def preprocess_gaelic_word(word):
+    """
+    Applies preprocessing to a Scottish Gaelic word:
+    - Replace acute accents with grave ones.
+    - Remove emphatic suffixes (-sa, -se, -san, -ne).
+    - Remove prosthetic consonants (t-, h-, n-).
+    - Remove lenition marker (initial 'h' after the first consonant).
+    """
+    # 1. Replace acute accents (´) with grave accents (`)
+    acute_to_grave = {
+        'á': 'à', 'é': 'è', 'í': 'ì', 'ó': 'ò', 'ú': 'ù',
+        'Á': 'À', 'É': 'È', 'Í': 'Ì', 'Ó': 'Ò', 'Ú': 'Ù'
+    }
+    word = ''.join(acute_to_grave.get(c, c) for c in word)
+
+    # 2. Remove emphatic suffixes
+    emphatic_suffixes = ['-sa', '-se', '-san', '-ne', 'sa', 'se', 'san', 'ne']
+    for suffix in emphatic_suffixes:
+        if word.endswith(suffix):
+            word = re.sub(f"{suffix}$", "", word)
+            break
+
+    # 3. Remove prosthetic consonants
+    if word.startswith(('t-', 'h-', 'n-')):
+        word = word[2:]
+    elif re.match(r'^[tnh][aeiouàèìòù]', word):
+        word = word[1:]
+
+    # 4. Remove lenition marker (second letter 'h')
+    if len(word) > 2 and word[1] == 'h':
+        word = word[0] + word[2:]
+
+    return word
+
 
 # LOAD IRREGULAR LEMMA DICTIONARY
-# This JSON file contains mappings of irregular forms to their lemmas.
-# Example: "bha" → "bi", "daoine" → "duine"
 with open("irregular_dict.json", "r", encoding="utf-8") as f:
     irregulars = json.load(f)
 
 # DEFINE SUFFIX-BASED RULES
-# These rules apply to words that follow regular morphological patterns.
-# Each rule checks for a suffix and transforms the word to its likely lemma.
-# Only a few carefully tested rules are used to avoid over-stemming.
 suffix_rules = [
-    # Genitive singular → restore base form
-    # e.g., "eilein" → "eilean"
     ("in", lambda w: w[:-2] + "an"),
-
-    # Plural long form → strip to base
-    # e.g., "eileanan" → "eilean"
     ("anan", lambda w: w[:-5]),
-
-    # Regular plural suffix
-    # e.g., "balg-ean" → "balg"
     ("ean", lambda w: w[:-3]),
 ]
 
+
 # CREATE NLP PIPELINE
-# Since spaCy does not support Scottish Gaelic directly,
-# we use a blank multilingual ("xx") model.
 nlp = spacy.blank("xx")
-nlp.max_length = 20_000_000  # Allow large inputs
+nlp.max_length = 20_000_000
 
 
 # DEFINE CUSTOM RULE-BASED LEMMATIZER
-# This component replaces spaCy’s default lemmatizer.
 @Language.component("gaelic_lemmatizer")
 def gaelic_lemmatizer(doc):
     for token in doc:
-        text = token.text.lower()  # Normalize token to lowercase
+        raw_text = token.text.lower()
+        text = preprocess_gaelic_word(raw_text)
 
-        # Step 1: Check irregular dictionary
+        # Step 1: Irregular dictionary lookup
         if text in irregulars:
             token.lemma_ = irregulars[text]
             continue
 
-        # Step 2: Apply first matching suffix rule
+        # Step 2: Suffix rule application
         for suffix, func in suffix_rules:
             if text.endswith(suffix):
                 token.lemma_ = func(text)
                 break
         else:
-            token.lemma_ = text  # Default to unchanged word
+            token.lemma_ = text  # Keep as-is if no rules apply
 
     return doc
 
 
-# REGISTER CUSTOM LEMMATIZER IN PIPELINE
+# REGISTER IN NLP PIPELINE
 nlp.add_pipe("gaelic_lemmatizer", name="lemmatizer", last=True)
 
-# LOAD TOKENS FROM CORPUS FILE (only first word per line)
-input_file = "Latest_Corpus.txt"  # Contains "word source" lines
+
+# LOAD INPUT DATA
+input_file = "Latest_Corpus.txt"  # Format: "word source"
 tokens = []
 
 with open(input_file, "r", encoding="utf-8") as f:
@@ -78,20 +101,21 @@ with open(input_file, "r", encoding="utf-8") as f:
         line = line.strip()
         if not line:
             continue
-        word = line.split(" ", 1)[0]  # Get only the first word
+        word = line.split(" ", 1)[0]  # Extract only the first word per line
         tokens.append(word.lower())
 
-# CONVERT TOKEN LIST TO TEXT FOR spaCy
+
+# PROCESS AND OUTPUT
 text = " ".join(tokens)
 doc = nlp(text)
 
-# PRINT TO CONSOLE
+# Print results to console
 print("Token → Lemma")
 print("-" * 20)
 for token in doc:
     print(f"{token.text} → {token.lemma_}")
 
-# SAVE TO FILE
+# Save to output file
 with open("lemmatized_output.txt", "w", encoding="utf-8") as out:
     for token in doc:
         out.write(f"{token.text} -> {token.lemma_}\n")
