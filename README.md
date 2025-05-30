@@ -71,4 +71,4 @@ lemmatizer_gaelic/
 ---
 
 ## Status
-**Work in Progress – June 2025**
+**Work in Progress – May 2025**
