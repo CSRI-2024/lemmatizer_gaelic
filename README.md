@@ -7,7 +7,7 @@ This project is part of an ongoing collaborative research initiative between the
 ## Project Context
 
 - **Year 1**: A team of students created a cleaned corpus of Scottish Gaelic text and a tokenizer.
-- **Year 2 (Current)**: Our focus is on developing a rule-based lemmatizer and generating linguistic statistics to support broader Gaelic text analysis.
+- **Year 2 (Current)**: Our focus is on developing a rule-based lemmatizer, generating word frequency statistics, and implementing preprocessing techniques specific to Scottish Gaelic grammar and spelling.
 
 ---
 
@@ -17,6 +17,7 @@ This lemmatizer reduces inflected Scottish Gaelic word forms to their base forms
 
 - A **manually curated irregular dictionary** for unpredictable wordforms (e.g., `chunnaic → faic`)
 - A set of **carefully tested suffix rules** for regular morphological patterns (e.g., `taighean → taigh`)
+- Preprocessing steps that handle **accents**, **emphatic suffixes**, **prosthetic consonants**, and **lenition** based on expert Gaelic linguistic guidelines
 - Frequency-guided refinement: all rules and dictionary entries are based on analysis of the most common words in the corpus
 - Output in a simple, editable format for future researchers to reuse or expand
 
@@ -25,32 +26,49 @@ This lemmatizer reduces inflected Scottish Gaelic word forms to their base forms
 ## Project Structure
 
 lemmatizer_gaelic/
-├── lemmatizer.py # Main lemmatization script using spaCy
-├── irregular_dict.json # Irregular word → lemma mappings
-├── CleanedCorpus.txt # Cleaned and tokenized Gaelic corpus
-├── word_frequency.py # Tool to generate word frequency statistics
-├── stopWords.txt # List of Gaelic stop words (excluded from stats)
-├── lemmatized_output.txt # Final lemma output (token → lemma)
-├── word_frequencies.txt # Top 100 frequent tokens for refinement
-└── README.md # Project documentation
-
+├── lemmatizer.py             # Main lemmatization script using spaCy
+├── irregular_dict.json       # Irregular word → lemma mappings
+├── Latest_Corpus.txt         # Cleaned corpus with "word source" format
+├── lemmatized_output.txt     # Final lemma output (token → lemma)
+├── word_frequency.py         # Word frequency analysis script (by source)
+├── stopWords.txt             # List of Gaelic stop words (excluded from stats)
+├── CorpusBySource.py         # Exports per-source texts from the raw corpus
+└── README.md                 # Project documentation
 
 ---
 
-##  How It Works
+## How It Works
 
-1. **Word Frequency Analysis**  
-   Use `word_frequency.py` to generate a ranked list of tokens (excluding stop words).
+### 1. **Corpus Preparation**
+   - The input corpus (`Latest_Corpus.txt`) contains lines in the format `word "source"`
+   - Only the first word of each line is used for lemmatization
 
-2. **Manual Review & Rule Creation**  
-   Identify the most common irregular and regular word patterns.
+### 2. **Preprocessing Steps**
+   - Replace **acute accents** with **grave accents** to match modern Gaelic orthography
+   - Remove **emphatic suffixes** (`-sa`, `-se`, `-san`, `-ne`)
+   - Strip **prosthetic consonants** (`t-`, `h-`, `n-`) from the start of words
+   - Remove **lenition** markers (i.e., `h` as second letter)
 
-3. **Lemmatization Process (`lemmatizer.py`)**
-   - Matches known irregular forms from `irregular_dict.json`
-   - Applies safe suffix rules to common word endings (e.g., `-ean`, `-anan`, `-in`)
-   - Leaves unmatched tokens unchanged
+### 3. **Lemmatization (lemmatizer.py)**
+   - Apply preprocessing to each word
+   - Match irregular forms from `irregular_dict.json`
+   - Apply known suffix rules (`-ean`, `-anan`, `-in`) to transform regular words
+   - Save results in `lemmatized_output.txt`
 
-4. **Output**  
-   Results are saved to `lemmatized_output.txt` in the format:  
+### 4. **Word Frequency Analysis (word_frequency.py)**
+   - Computes the top 100 most frequent words from each source (excluding stop words)
+   - Used to guide dictionary updates and new rule creation
 
-**Work on Progress**
+---
+
+## Future Work
+
+- Expand suffix rules and irregular dictionary based on linguistic patterns shared by Napier University
+- Group frequent words by part-of-speech (nouns, verbs, adjectives)
+- Generate statistics on morphological patterns by frequency
+- Evaluate lemmatizer accuracy with a human-validated reference set
+
+---
+
+## Status
+**Work in Progress – June 2025**
