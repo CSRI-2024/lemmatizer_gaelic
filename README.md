@@ -23,17 +23,7 @@ This lemmatizer reduces inflected Scottish Gaelic word forms to their base forms
 
 ---
 
-## Project Structure
-
-lemmatizer_gaelic/
-├── lemmatizer.py             # Main lemmatization script using spaCy
-├── irregular_dict.json       # Irregular word → lemma mappings
-├── Latest_Corpus.txt         # Cleaned corpus with "word source" format
-├── lemmatized_output.txt     # Final lemma output (token → lemma)
-├── word_frequency.py         # Word frequency analysis script (by source)
-├── stopWords.txt             # List of Gaelic stop words (excluded from stats)
-├── CorpusBySource.py         # Exports per-source texts from the raw corpus
-└── README.md                 # Project documentation
+<pre><code>```text lemmatizer_gaelic/ ├── lemmatizer.py # Main lemmatization script using spaCy ├── irregular_dict.json # Irregular word → lemma mappings ├── Latest_Corpus.txt # Cleaned corpus with "word source" format ├── lemmatized_output.txt # Final lemma output (token → lemma) ├── word_frequency.py # Word frequency analysis script (by source) ├── stopWords.txt # List of Gaelic stop words (excluded from stats) ├── CorpusBySource.py # Exports per-source texts from the raw corpus └── README.md # Project documentation ```</code></pre>
 
 ---
 
