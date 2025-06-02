@@ -23,6 +23,8 @@ This lemmatizer reduces inflected Scottish Gaelic word forms to their base forms
 
 ---
 
+## Tree-like Folder Structure
+
 ```text
 lemmatizer_gaelic/
 ├── lemmatizer.py           # Main lemmatization script using spaCy
@@ -33,6 +35,7 @@ lemmatizer_gaelic/
 ├── stopWords.txt           # List of Gaelic stop words (excluded from stats)
 ├── CorpusBySource.py       # Exports per-source texts from the raw corpus
 └── README.md               # Project documentation
+```
 ---
 
 ## How It Works
