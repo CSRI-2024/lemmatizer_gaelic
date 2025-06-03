@@ -56,6 +56,36 @@ lemmatizer_gaelic/
    - Apply known suffix rules (`-ean`, `-anan`, `-in`) to transform regular words
    - Save results in `lemmatized_output.txt`
 
+## Code Flowchart
+
+```text
+Load input corpus file 
+  ↓
+Extract tokens (words) → store in list
+  ↓
+For each token in list:
+  ↓
+Preprocess token:
+  ├─ Replace acute accents with grave accents
+  ├─ Remove emphatic suffixes (e.g., -sa, -se)
+  ├─ Remove prosthetic consonants (e.g., t-, h-, n-)
+  └─ Remove lenition marker (initial 'h' after first consonant)
+  ↓
+Check if token is in irregular lemma dictionary
+  ├─ Yes → Assign irregular lemma
+  └─ No → Apply suffix rules:
+          ├─ If suffix matches, transform token to lemma
+          └─ Else → lemma = preprocessed token
+  ↓
+Assign lemma to token in spaCy Doc object
+  ↓
+Repeat for all tokens
+  ↓
+Output results:
+  ├─ Print token → lemma pairs to console
+  └─ Write token → lemma pairs to output file (lemmatized_output.txt)
+```
+
 ### 4. **Word Frequency Analysis (word_frequency.py)**
    - Computes the top 100 most frequent words from each source (excluding stop words)
    - Used to guide dictionary updates and new rule creation
