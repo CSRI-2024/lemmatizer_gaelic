@@ -19,28 +19,29 @@ def preprocess_gaelic_word(word):
     Step 4: Remove lenition marker (if second letter is 'h').
     """
 
-    # --- Step 1: Replace acute accents with grave accents ---
+    # 1. Replace acute accents with grave accents
     acute_to_grave = {
         'á': 'à', 'é': 'è', 'í': 'ì', 'ó': 'ò', 'ú': 'ù',
-        'Á': 'À', 'É': 'È', 'Í': 'Ì', 'Ó': 'Ò', 'Ú': 'Ù'
+        'Á': 'À', 'É': 'È', 'Í': 'Ì', 'Ó': 'Ò', 'Ú': 'Ù',
+        'ʼ': '`'
     }
     word = ''.join(acute_to_grave.get(c, c) for c in word)
 
-    # --- Step 2: Remove hyphenated emphatic suffixes only ---
+    # 2. Remove hyphenated emphatic suffixes only
     emphatic_suffixes = ['-sa', '-se', '-san', '-ne']
     for suffix in emphatic_suffixes:
         if word.endswith(suffix) and len(word) > len(suffix):
             word = word[:-len(suffix)]
             break
 
-    # --- Step 3: Remove prosthetic consonants ---
+    # 3. Remove prosthetic consonants
     # Only strip prosthetics if followed by a vowel or a hyphen
     if re.match(r"^(t-|h-|n-)", word):
         word = word[2:]
     elif re.match(r"^[tnh][aeiouàèìòù]", word):
         word = word[1:]
 
-    # --- Step 4: Remove lenition (second letter 'h') ---
+    # 4. Remove lenition (second letter 'h')
     if len(word) > 2 and word[1] == 'h':
         word = word[0] + word[2:]
 
@@ -54,10 +55,14 @@ with open("irregular_dict.json", "r", encoding="utf-8") as f:
 
 # DEFINE SUFFIX-BASED RULES
 suffix_rules = [
-    ("in", lambda w: w[:-2] + "an"), # Handles genitive singular forms, which often slenderize the base.
-    ("anan", lambda w: w[:-5]), # Removes the long plural suffix -anan, a variant of Class 1 plurals.
-    ("ean", lambda w: w[:-3]), # Handles regular plural suffixes.
+    ("aichean", lambda w: w[:-7]),  # Class 1a plural (e.g., notaichean → not)
+    ("annan", lambda w: w[:-5]),    # Class 1a plural (alt) (e.g., lochannan → loch)
+    ("anan", lambda w: w[:-5]),     # Long plural (e.g., taigheanan → taigh)
+    ("ean", lambda w: w[:-3]),      # Class 1 plural, slender (e.g., taighean → taigh)
+    ("an", lambda w: w[:-2]),       # Class 1 plural, broad (e.g., làmhan → làmh)
+    ("in", lambda w: w[:-2] + "an") # Genitive singular with slenderisation (e.g., eilein → eilean)
 ]
+
 
 
 # CREATE NLP PIPELINE
