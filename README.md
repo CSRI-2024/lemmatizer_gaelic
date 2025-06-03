@@ -23,7 +23,7 @@ This lemmatizer reduces inflected Scottish Gaelic word forms to their base forms
 
 ---
 
-## Tree-like Folder Structure
+# Tree-like Folder Structure
 
 ```text
 lemmatizer_gaelic/
