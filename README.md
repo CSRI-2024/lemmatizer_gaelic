@@ -61,29 +61,41 @@ lemmatizer_gaelic/
 ```text
 Load input corpus file 
   ↓
-Extract tokens (words) → store in list
+Extract tokens → store in list
   ↓
-For each token in list:
+For each token:
   ↓
-Preprocess token:
-  ├─ Replace acute accents with grave accents
-  ├─ Remove emphatic suffixes (e.g., -sa, -se)
-  ├─ Remove prosthetic consonants (e.g., t-, h-, n-)
-  └─ Remove lenition marker (initial 'h' after first consonant)
+Convert token to lowercase
   ↓
-Check if token is in irregular lemma dictionary
-  ├─ Yes → Assign irregular lemma
-  └─ No → Apply suffix rules:
-          ├─ If suffix matches, transform token to lemma
-          └─ Else → lemma = preprocessed token
+Check if token exists in irregular dictionary
+  ├─ Yes → Use lemma from irregulars and SKIP further steps
+  └─ No → Proceed to preprocessing
+             ↓
+      Preprocess token:
+        ├─ Replace acute accents with grave accents
+        ├─ Remove emphatic suffixes (e.g., -sa, -se, -san, -ne)
+        ├─ Remove prosthetic consonants (t-, h-, n-) ONLY if length > 2
+        └─ Remove lenition marker (second letter 'h')
+             ↓
+      Apply suffix rules:
+        ├─ If suffix matched → Apply rule and set lemma
+        └─ Else → Lemma = preprocessed token
   ↓
-Assign lemma to token in spaCy Doc object
+Assign final lemma to token in spaCy `Doc` object
   ↓
 Repeat for all tokens
   ↓
 Output results:
-  ├─ Print token → lemma pairs to console
-  └─ Write token → lemma pairs to output file (lemmatized_output.txt)
+  ├─ Print token → lemma to console
+  └─ Save results to `lemmatized_output.txt`
+  ↓
+Print summary:
+  ├─ Changed by irregulars
+  ├─ Changed by preprocessing
+  ├─ Changed by suffix
+  ├─ Total changed / unchanged words
+  └─ Total operations applied
+
 ```
 
 ### 4. **Word Frequency Analysis (word_frequency.py)**
