@@ -19,9 +19,15 @@ with open("OneLineFile.txt", "r", encoding="utf-8") as f:
 # COUNT WORD FREQUENCIES
 word_counts = Counter(tokens)
 
+# SAVE TOP 500 WORDS TO A NEW TEXT FILE
+top_n = 500
+with open("Top500Words.txt", "w", encoding="utf-8") as out_file:
+    for word, freq in word_counts.most_common(top_n):
+        out_file.write(f"{word}\n")  # Only writing the word, one per line
+
 # DISPLAY TOP 100 FREQUENT WORDS
 print("TOP 100 FREQUENT WORDS")
 print("Word → Frequency (excluding stop words)")
 print("-" * 40)
 for word, freq in word_counts.most_common(500):  # Adjust number as needed
-    print(f"{word} → {freq}")
+    print(word)
