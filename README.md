@@ -72,12 +72,12 @@ Check if token exists in irregular dictionary
       Preprocess token:
         ├─ Replace acute accents with grave accents
         ├─ Remove emphatic suffixes (e.g., -sa, -se, -san, -ne)
-        ├─ Remove prosthetic consonants (t-, h-, n-) ONLY if length > 2
+        ├─ Remove prosthetic consonants (t-, h-, n-) ONLY if starts with those
         └─ Remove lenition marker (second letter 'h')
              ↓
       Apply suffix rules:
         ├─ If suffix matched → Apply rule and set lemma
-        └─ Else → Lemma = preprocessed token
+        └─ Else → Lemma = preprocessed token (if length > 1), otherwise original
   ↓
 Assign final lemma to token in spaCy `Doc` object
   ↓
@@ -93,6 +93,7 @@ Print summary:
   ├─ Changed by suffix
   ├─ Total changed / unchanged words
   └─ Total operations applied
+
 
 ```
 
