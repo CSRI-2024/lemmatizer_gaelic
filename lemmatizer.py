@@ -8,8 +8,6 @@ Author: Oskar Diyali
 import spacy
 from spacy.language import Language
 import json
-import re
-
 
 # PREPROCESSING FUNCTION
 def preprocess_gaelic_word(word):
@@ -37,12 +35,9 @@ def preprocess_gaelic_word(word):
             break
 
     # 3. Remove prosthetic consonants
-    # Only strip prosthetics if word is longer than 2 characters and followed by a vowel or a hyphen
-    if len(word) > 2:
-        if re.match(r"^(t-|h-|n-)", word):
-            word = word[2:]
-        elif re.match(r"^[tnh][aeiouàèìòù]", word):
-            word = word[1:]
+    # Only strip prosthetics if in the form of t-, h-, or n- (e.g., t-each → each)
+    if word.startswith(("t-", "h-", "n-")):
+        word = word[2:]
 
     # 4. Remove lenition (second letter 'h')
     if len(word) > 2 and word[1] == 'h':
@@ -75,7 +70,6 @@ nlp.max_length = 20_000_000
 
 
 # CUSTOM RULE-BASED LEMMATIZER
-
 @Language.component("gaelic_lemmatizer")
 def gaelic_lemmatizer(doc):
     for token in doc:
@@ -162,3 +156,4 @@ print(f"Changed by suffix rules: {changed_by_suffix}")
 print(f"Words changed: {total_changed}")
 print(f"Words unchanged: {total_unchanged}")
 print(f"\nHence, {changed_by_preprocessing+changed_by_irregular+changed_by_suffix} operations occurred, but only {total_changed} final results differed from the original.")
+
