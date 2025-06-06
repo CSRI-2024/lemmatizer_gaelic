@@ -86,10 +86,16 @@ def gaelic_lemmatizer(doc):
         # STEP 3: Suffix-based lemmatization
         for suffix, func in suffix_rules:
             if preprocessed.endswith(suffix):
-                token.lemma_ = func(preprocessed)
+                lemma_candidate = func(preprocessed)
+                # Avoid returning single-letter lemmas (unless from irregulars)
+                if len(lemma_candidate) > 1:
+                    token.lemma_ = lemma_candidate
+                else:
+                    token.lemma_ = preprocessed
                 break
         else:
-            token.lemma_ = preprocessed  # Default to preprocessed if no rules matched
+            # If no suffix matched, assign preprocessed form only if it's more than 1 character
+            token.lemma_ = preprocessed if len(preprocessed) > 1 else raw_text
 
     return doc
 

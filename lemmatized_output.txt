@@ -10,12 +10,12 @@ airson -> airson
 ri -> ri
 seo -> seo
 bho -> bo
-nan -> n
+nan -> nan
 mi -> mi
 baile -> baile
 mu -> mu
 cha -> ca
-san -> s
+san -> san
 eadar -> eadar
 alba -> alba
 bheil -> beil
@@ -34,7 +34,7 @@ ris -> ris
 co -> co
 duine -> duine
 eilean -> eil
-chan -> c
+chan -> can
 fuireach -> fuire
 eil -> bi
 iar -> iar
@@ -96,7 +96,7 @@ bidh -> bi
 cuid -> cuid
 falbh -> falbh
 oilthigh -> oilthigh
-dhan -> d
+dhan -> dan
 prìomh -> prìomh
 comhairle -> comhairle
 ath -> ath
@@ -325,7 +325,7 @@ aibhne -> aibhne
 roimhe -> roimhe
 cò -> cò
 thog -> tog
-bhean -> b
+bhean -> bean
 caisteal -> caisteal
 tuilleadh -> tuille
 còrr -> còrr
