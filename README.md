@@ -65,8 +65,6 @@ Extract tokens → store in list
   ↓
 For each token:
   ↓
-Convert token to lowercase
-  ↓
 Check if token exists in irregular dictionary
   ├─ Yes → Use lemma from irregulars and SKIP further steps
   └─ No → Proceed to preprocessing
