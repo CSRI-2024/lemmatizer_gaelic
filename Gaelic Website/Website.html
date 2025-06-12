@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scottish Gaelic Project | Cornell College</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header role="banner">
+    <div class="container header-flex">
+      <div class="logo-container">
+        <img src="pictures/CClogo.png" alt="Cornell College Logo" class="logo" />
+      </div>
+      <div class="header-text">
+        <h1>Scottish Gaelic Research Project</h1>
+        <p class="subtitle">A CSRI Linguistics Research Project</p>
+      </div>
+      <nav class="github-link" aria-label="GitHub">
+        <a href="https://github.com/CSRI-2024" target="_blank" title="View GitHub Repository">
+          <img src="pictures/git1.png" alt="GitHub Repository Link" />
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    <section class="tabs" aria-label="Main Sections">
+      <div class="tab-buttons" role="tablist">
+        <button class="tab active" onclick="openTab('intro')" role="tab">Intro</button>
+        <button class="tab" onclick="openTab('past')" role="tab">Past Students</button>
+        <button class="tab" onclick="openTab('zack')" role="tab">Zack's Work</button>
+        <button class="tab" onclick="openTab('kaede')" role="tab">Kaede's Work</button>
+        <button class="tab" onclick="openTab('oskar')" role="tab">Oskar's Work</button>
+      </div>
+
+      <div class="tab-content">
+        <!-- Intro -->
+        <section id="intro" class="tab-panel active" role="tabpanel">
+          <h2>Project Overview</h2>
+          <p class="overview-paragraph">
+            The Scottish Gaelic Research Project at Cornell College is an interdisciplinary initiative that bridges linguistics and computer science to support endangered language revitalization. Our team focuses on developing tools for automatic lemmatization, part-of-speech tagging, and morphological analysis tailored to the complexities of Scottish Gaelic. Unlike many mainstream NLP projects, we face the unique challenges of low-resource languages, which often lack large annotated corpora. By collaborating with native speakers and Gaelic scholars, we ensure that our models respect the linguistic and cultural integrity of the language. The project has become a hands-on platform for undergraduate research, contributing to both academic knowledge and practical digital tools for the Gaelic-speaking community.
+          </p>
+          <div class="overview-image">
+            <img src="pictures/GaelicImage1.png" alt="Flowchart showing Gaelic NLP pipeline" />
+          </div>
+          <p class="overview-paragraph">
+            Our current work includes designing a custom rule-based lemmatizer that handles affix stripping, prosthetic consonants, and Gaelic-specific grammatical structures. We also incorporate manual tagging and evaluation to refine our preprocessing rules, helping to increase accuracy and reduce bias in automated analyses. Students like Zack and Kaede are exploring advanced tasks such as corpus coverage assessment and syntactic parsing, enriching the project’s scope. Meanwhile, I am developing the Python codebase that brings all our components together — from preprocessing to lexicon integration and visualization. Altogether, this project exemplifies how small liberal arts colleges can contribute to globally significant work through focused, collaborative research.
+          </p>
+        </section>
+
+        <!-- Past -->
+        <section id="past" class="tab-panel" role="tabpanel">
+          <h2>Past Students' Contributions</h2>
+          <p>
+            The first phase of the Scottish Gaelic research project laid the critical groundwork for all current and future development. Last year’s CSRI students successfully built one of the first digital corpora dedicated to Scottish Gaelic by compiling text from a wide range of written sources. From there, the team designed a custom tokenizer and developed a part-of-speech tagger tailored to the unique morphological and syntactic structures of the language.
+          </p>
+          <p>
+            These tools addressed key challenges such as lenition, affixation, and compound word formation, helping to create a more accurate and language-specific NLP pipeline. In a major milestone, the team contributed their work to the open-source NLP library spaCy, expanding its support for low-resource Celtic languages. They also presented their findings to Napier University, fostering a transatlantic academic partnership.
+          </p>
+        </section>
+
+        <!-- Zack -->
+        <section id="zack" class="tab-panel" role="tabpanel">
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Zack’s Work</h2>
+              <p>
+                Zack is focused on foundational work to clean and expand the Scottish Gaelic text corpus. He has written scripts in R to preprocess and tokenize raw text from various historical and contemporary sources, ensuring quality and consistency. His preprocessing pipeline helps reduce noise and makes the dataset more useful for downstream NLP applications.
+              </p>
+              <p>
+                A distinctive part of his work is building timelines that organize corpus material chronologically — helping the team analyze historical language evolution. He's also sourcing new Gaelic texts to enrich the diversity of the corpus.
+              </p>
+            </div>
+            <div class="profile-side">
+              <img src="Zackpic.png" alt="Zack Orrick" />
+              <p class="photo-caption">Zack is a senior Data Science student at Cornell College.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Kaede -->
+        <section id="kaede" class="tab-panel" role="tabpanel">
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Kaede’s Work</h2>
+              <p>
+                Kaede contributes to building a Gaelic Data Analytics API, working remotely with faculty at Cornell and Napier. She is designing a tool to identify Scottish Gaelic text — foundational for scaling linguistic analysis across our corpus. This detection tool is critical for applying rule-based lemmatization and syntactic tools reliably.
+              </p>
+              <p>
+                Using both rule-based and statistical methods, she builds classifiers and analyzes lexical and grammatical patterns, even without speaking Gaelic. Her work boosts accessibility for underrepresented languages and supports reproducible NLP workflows.
+              </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/Kaedepic.png" alt="Kaede" />
+              <p class="photo-caption">Kaede is a junior double-majoring in CS and Data Science.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Oskar -->
+        <section id="oskar" class="tab-panel" role="tabpanel">
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Oskar's Work</h2>
+              <p>
+                Oskar is leading development of a rule-based lemmatizer tailored for Scottish Gaelic using Python and spaCy. His pipeline accounts for Gaelic morphology: accent normalization, lenition, emphatic/prosthetic removal, and suffix transformation to derive base forms.
+              </p>
+              <p>
+                He's also built frequency analyses, irregular lemma dictionaries, and output evaluation systems. His goal is to expand rule coverage and launch a public-facing site to share findings and tools for Gaelic NLP.
+              </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/Oskarpic.jpg" alt="Oskar Diyali" />
+              <p class="photo-caption">Oskar is a junior studying Data Science & Computer Science at Cornell.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <p>&copy; 2025 Cornell College | Designed by Oskar Diyali</p>
+    </div>
+  </footer>
+
+  <script>
+    function openTab(tabId) {
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      document.querySelectorAll('.tab').forEach(button => {
+        button.classList.remove('active');
+      });
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>
