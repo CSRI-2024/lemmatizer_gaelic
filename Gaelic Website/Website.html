@@ -29,9 +29,8 @@
       <div class="tab-buttons" role="tablist">
         <button class="tab active" onclick="openTab('intro')" role="tab">Intro</button>
         <button class="tab" onclick="openTab('past')" role="tab">Past Students</button>
-        <button class="tab" onclick="openTab('zack')" role="tab">Zack's Work</button>
-        <button class="tab" onclick="openTab('kaede')" role="tab">Kaede's Work</button>
-        <button class="tab" onclick="openTab('oskar')" role="tab">Oskar's Work</button>
+        <button class="tab" onclick="openTab('current')" role="tab">Current Students</button>
+        <button class="tab" onclick="openTab('advisors')" role="tab">Advisors</button>
       </div>
 
       <div class="tab-content">
@@ -49,7 +48,7 @@
           </p>
         </section>
 
-        <!-- Past -->
+        <!-- Past Students -->
         <section id="past" class="tab-panel" role="tabpanel">
           <h2>Past Students' Contributions</h2>
           <p>
@@ -60,8 +59,8 @@
           </p>
         </section>
 
-        <!-- Zack -->
-        <section id="zack" class="tab-panel" role="tabpanel">
+        <!-- Current Students -->
+        <section id="current" class="tab-panel" role="tabpanel">
           <div class="profile-container">
             <div class="profile-text">
               <h2>Zack’s Work</h2>
@@ -73,14 +72,27 @@
               </p>
             </div>
             <div class="profile-side">
-              <img src="Zackpic.png" alt="Zack Orrick" />
+              <img src="pictures/Zackpic.png" alt="Zack Orrick" />
               <p class="photo-caption">Zack is a senior Data Science student at Cornell College.</p>
             </div>
           </div>
-        </section>
 
-        <!-- Kaede -->
-        <section id="kaede" class="tab-panel" role="tabpanel">
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Oskar’s Work</h2>
+              <p>
+                Oskar is leading development of a rule-based lemmatizer tailored for Scottish Gaelic using Python and spaCy. His pipeline accounts for Gaelic morphology: accent normalization, lenition, emphatic/prosthetic removal, and suffix transformation to derive base forms.
+              </p>
+              <p>
+                He's also built frequency analyses, irregular lemma dictionaries, and output evaluation systems. His goal is to expand rule coverage and launch a public-facing site to share findings and tools for Gaelic NLP.
+              </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/Oskarpic.jpg" alt="Oskar Diyali" />
+              <p class="photo-caption">Oskar is a junior studying Data Science & Computer Science at Cornell.</p>
+            </div>
+          </div>
+
           <div class="profile-container">
             <div class="profile-text">
               <h2>Kaede’s Work</h2>
@@ -98,21 +110,53 @@
           </div>
         </section>
 
-        <!-- Oskar -->
-        <section id="oskar" class="tab-panel" role="tabpanel">
+        <!-- Advisors -->
+        <section id="advisors" class="tab-panel" role="tabpanel">
           <div class="profile-container">
             <div class="profile-text">
-              <h2>Oskar's Work</h2>
+              <h2>Dr. Tyler George</h2>
               <p>
-                Oskar is leading development of a rule-based lemmatizer tailored for Scottish Gaelic using Python and spaCy. His pipeline accounts for Gaelic morphology: accent normalization, lenition, emphatic/prosthetic removal, and suffix transformation to derive base forms.
-              </p>
-              <p>
-                He's also built frequency analyses, irregular lemma dictionaries, and output evaluation systems. His goal is to expand rule coverage and launch a public-facing site to share findings and tools for Gaelic NLP.
+                Professor George is an Assistant Professor of Statistics who teaches introductory and advanced statistics courses including Introduction to Time Series and Advanced Regression Analysis. His professional interests lie in data science, analytics, hypothesis testing, and statistics education. He holds a Ph.D. in Statistics and Analytics from Central Michigan University.
               </p>
             </div>
             <div class="profile-side">
-              <img src="pictures/Oskarpic.jpg" alt="Oskar Diyali" />
-              <p class="photo-caption">Oskar is a junior studying Data Science & Computer Science at Cornell.</p>
+              <img src="pictures/tyler1.png" alt="Dr. Tyler George" />
+            </div>
+          </div>
+
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Dr. Ajit Chavan</h2>
+              <p>
+                Dr. Chavan is an Associate Professor of Computer Science at Cornell College. He teaches courses ranging from Data Structures and Algorithms to Computer Organization and Operating Systems. His research interests include parallel and distributed systems, big data applications, and machine learning infrastructure.
+              </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/ajit1.png" alt="Dr. Ajit Chavan" />
+            </div>
+          </div>
+
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Dr. Peter Barclay</h2>
+              <p>
+                Dr. Barclay is a lecturer at Edinburgh Napier University, specializing in NLP and corpus linguistics. He has contributed to several digital humanities and computational linguistics projects, focusing particularly on low-resource languages like Scottish Gaelic. His work bridges linguistics and computer science in innovative ways.
+              </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/petesample1.png" alt="Dr. Peter Barclay" />
+            </div>
+          </div>
+
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Dr. Alistair Lawson</h2>
+              <p>
+                Dr. Lawson is a lecturer at Edinburgh Napier University with expertise in software engineering, machine learning, and digital tools for minority languages. He contributes to interdisciplinary research supporting Gaelic technology, educational systems, and student-led innovation in computational linguistics.
+              </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/alistair1.jpg" alt="Dr. Alistair Lawson" />
             </div>
           </div>
         </section>
