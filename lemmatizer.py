@@ -72,6 +72,7 @@ except json.JSONDecodeError:
 
 # DEFINE SUFFIX RULES
 # Order matters: longer suffixes should come before shorter ones to prevent partial matches.
+
 suffix_rules = [
     ("aichean", lambda w: w[:-7]),  # Class 1a plural (e.g., notaichean → not)
     ("annan", lambda w: w[:-5]),  # Class 1a plural (alt) (e.g., lochannan → loch)
