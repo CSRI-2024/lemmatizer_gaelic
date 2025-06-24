@@ -1,13 +1,13 @@
 # Scottish Gaelic Lemmatizer – CSRI Research Project
 
-This project is part of an ongoing collaborative research initiative between the Cornell College Computer Science Department and Napier University in Edinburgh, Scotland. The goal is to build tools that enable deeper text analysis for the Scottish Gaelic language — a low-resource language with limited computational tools.
+This project is part of an ongoing collaborative research initiative between the **Cornell College Computer Science Department** and **Napier University** in Edinburgh, Scotland. The goal is to build tools that enable deeper text analysis for the **Scottish Gaelic language** — a low-resource language with limited computational tools.
 
 ---
 
 ## Project Context
 
 - **Year 1**: A team of students created a cleaned corpus of Scottish Gaelic text and a tokenizer.
-- **Year 2 (Current)**: Our focus is on developing a rule-based lemmatizer, generating word frequency statistics, and implementing preprocessing techniques specific to Scottish Gaelic grammar and spelling.
+- **Year 2 (Current)**: Focused on developing a rule-based lemmatizer, generating word frequency statistics, and implementing preprocessing techniques specific to Scottish Gaelic grammar and spelling.
 
 ---
 
@@ -17,67 +17,94 @@ This lemmatizer reduces inflected Scottish Gaelic word forms to their base forms
 
 - A **manually curated irregular dictionary** for unpredictable wordforms (e.g., `chunnaic → faic`)
 - A set of **carefully tested suffix rules** for regular morphological patterns (e.g., `taighean → taigh`)
-- Preprocessing steps that handle **accents**, **emphatic suffixes**, **prosthetic consonants**, and **lenition** based on expert Gaelic linguistic guidelines
-- Frequency-guided refinement: all rules and dictionary entries are based on analysis of the most common words in the corpus
+- **Preprocessing steps** that handle accents, emphatic suffixes, prosthetic consonants, and lenition
+- **Frequency-guided refinement**: rules and dictionary are informed by analysis of the most common words
 - Output in a simple, editable format for future researchers to reuse or expand
 
 ---
 
-# Tree-like Folder Structure
+## Tree-like Folder Structure
 
-```text
 lemmatizer_gaelic/
-├── lemmatizer.py           # Main lemmatization script using spaCy
-├── irregular_dict.json     # Irregular word → lemma mappings
-├── Latest_Corpus.txt       # Cleaned corpus with "word source" format
-├── lemmatized_output.txt   # Final lemma output (token → lemma)
-├── word_frequency.py       # Word frequency analysis script (by source)
-├── stopWords.txt           # List of Gaelic stop words (excluded from stats)
-├── CorpusBySource.py       # Exports per-source texts from the raw corpus
-└── README.md               # Project documentation
-```
+├── lemmatizer.py                       # Main lemmatization script using spaCy custom component
+├── irregular_dict.json                 # Irregular word → lemma mappings
+├── Latest_Corpus.txt                   # Cleaned corpus with "word source" format
+├── lemmatized_output.txt               # Output from previous lemmatizer version / reference output
+├── lemmatized_output_pos_aware_example.txt # Example output from the new POS-aware lemmatizer
+├── compare_lemmas.py                   # Script to compare two lemmatizer output files
+├── word_frequency.py                   # Word frequency analysis script (by source)
+├── stopWords.txt                       # List of Gaelic stop words (excluded from stats)
+├── CorpusBySource.py                   # Exports per-source texts from the raw corpus
+└── README.md                           # Project documentation
+
+
+
 ---
 
-## How It Works
+##  How It Works
 
 ### 1. **Corpus Preparation**
-   - The input corpus (`Latest_Corpus.txt`) contains lines in the format `word "source"`
-   - Only the first word of each line is used for lemmatization
+- The input corpus (`Latest_Corpus.txt`) contains lines in the format:
+- Only the first word of each line is used for lemmatization.
+
+---
 
 ### 2. **Preprocessing Steps**
-   - Replace **acute accents** with **grave accents** to match modern Gaelic orthography
-   - Remove **emphatic suffixes** (`-sa`, `-se`, `-san`, `-ne`)
-   - Strip **prosthetic consonants** (`t-`, `h-`, `n-`) from the start of words
-   - Remove **lenition** markers (i.e., `h` as second letter)
+- Replace **acute accents** with **grave accents**
+- Remove **emphatic suffixes**: `-sa`, `-se`, `-san`, `-ne`
+- Strip **prosthetic consonants**: `t-`, `h-`, `n-` (at beginning)
+- Remove **lenition marker**: `h` as second letter (e.g., `bhean → bean`)
 
-### 3. **Lemmatization (lemmatizer.py)**
-   - Apply preprocessing to each word
-   - Match irregular forms from `irregular_dict.json`
-   - Apply known suffix rules (`-ean`, `-anan`, `-in`) to transform regular words
-   - Save results in `lemmatized_output.txt`
+---
+
+### 3. **Lemmatization Logic (`lemmatizer.py`)**
+
+- Apply preprocessing to each token
+- If token exists in irregular dictionary → use its mapped lemma
+- If not, apply suffix rules (`-ean`, `-an`, `-achadh`, etc.)
+- If no rules match, return preprocessed token (unless it's too short)
+
+---
 
 ## Code Flowchart
 
-```text
-Load input corpus file 
+Load input corpus file
   ↓
-Extract tokens → store in list
+Process text with spaCy pipeline (Tokenizer -> POS Tagger -> Custom Lemmatizer)
+  ↓                                  (This step assigns POS tags to tokens)
+For each token in the spaCy `Doc` object:
   ↓
-For each token:
+  Get lowercased raw text
+  Initialize lemma with raw text
   ↓
-Check if token exists in irregular dictionary
-  ├─ Yes → Use lemma from irregulars and SKIP further steps
+  1. Check if raw token text exists in irregular dictionary
+  ├─ Yes → Use lemma from irregulars (e.g., "deach" → "rach") and SKIP further steps for this token
   └─ No → Proceed to preprocessing
              ↓
-      Preprocess token:
+      2. Preprocess token text (e.g., "chuala" → "cuala", "bhean" → "bean"):
         ├─ Replace acute accents with grave accents
-        ├─ Remove emphatic suffixes (e.g., -sa, -se, -san, -ne)
-        ├─ Remove prosthetic consonants (t-, h-, n-) ONLY if starts with those
-        └─ Remove lenition marker (second letter 'h')
+        ├─ Remove emphatic suffixes
+        ├─ Remove prosthetic consonants
+        └─ Remove lenition marker
              ↓
-      Apply suffix rules:
-        ├─ If suffix matched → Apply rule and set lemma
-        └─ Else → Lemma = preprocessed token (if length > 1), otherwise original
+      3. Check if preprocessed token text exists in irregular dictionary
+      ├─ Yes → Use lemma from irregulars (e.g., "cuala" → "cluinn") and SKIP further steps
+      └─ No → Proceed to POS-informed suffix rules
+                  ↓
+          4. Apply POS-informed suffix rules (based on `token.pos_`):
+            ├─ If `token.pos_ == "NOUN"`:
+            │  ├─ Apply longest noun suffixes first (e.g., "-aichean" -> "", "-annan" -> "", "-ean" -> "", "-an" -> "")
+            │  └─ Examples: "eileanan" → "eilean", "stàitean" → "stàit", "lochan" → "loch"
+            ├─ If `token.pos_ == "VERB"`:
+            │  ├─ Apply longest verb suffixes first (e.g., "-eachadh" -> "-ich", "-eadh" -> "", "-te" -> "", "-ta" -> "")
+            │  └─ Examples: "atharrachadh" → "atharraich", "stèidheachadh" → "stèidhich", "aonaichte" → "aonaich", "sònraichte" → "sònraich"
+            ├─ If `token.pos_ == "ADJ"`:
+            │  ├─ Apply adjective-specific rules
+            │  └─ Examples: (comparatives, superlatives, ensuring base forms like "cumanta" remain unchanged)
+            └─ If no POS-specific rule matched:
+                   ↓
+                  5. Fallback: If preprocessing changed the word and no rule applied, use preprocessed word as lemma.
+                      If lemma length is 1 or less (and not an irregular), revert to original raw text.
   ↓
 Assign final lemma to token in spaCy `Doc` object
   ↓
@@ -85,7 +112,7 @@ Repeat for all tokens
   ↓
 Output results:
   ├─ Print token → lemma to console
-  └─ Save results to `lemmatized_output.txt`
+  └─ Save results to `lemmatized_output_pos_aware_example.txt`
   ↓
 Print summary:
   ├─ Changed by irregulars
@@ -95,22 +122,25 @@ Print summary:
   └─ Total operations applied
 
 
-```
+---
 
-### 4. **Word Frequency Analysis (word_frequency.py)**
-   - Computes the top 100 most frequent words from each source (excluding stop words)
-   - Used to guide dictionary updates and new rule creation
+### 4. **Word Frequency Analysis (`word_frequency.py`)**
+- Computes the top 100 most frequent words by source
+- Excludes stopwords (`stopWords.txt`)
+- Guides rule updates and dictionary development
 
 ---
 
 ## Future Work
 
-- Expand suffix rules and irregular dictionary based on linguistic patterns shared by Napier University
-- Group frequent words by part-of-speech (nouns, verbs, adjectives)
-- Generate statistics on morphological patterns by frequency
-- Evaluate lemmatizer accuracy with a human-validated reference set
+- Integrate a robust Gaelic POS tagger to improve lemmatizer accuracy
+- Expand suffix rules and irregulars using linguistic input from Napier University
+- Group frequent words by part of speech (noun, verb, adj) for better rule targeting
+- Evaluate lemmatizer accuracy using a manually verified gold standard
 
 ---
 
 ## Status
-**Work in Progress – May 2025**
+
+**Work in Progress — June 2025**
+
