@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vignette: Understanding theScottish Gaelic Lemmatizer</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette for Cornell College Alignment: Deep Purple Accent (#4A1A70) with warm, neutral background (#FDFBF6) and dark, readable text (#3C3633). -->
+    <!-- Application Structure Plan: The SPA is structured into logical, scrollable sections with a sticky navigation bar for quick access. The core of the application is the interactive "How it Works" section, which transforms the README's static flowchart into a dynamic, clickable diagram. This design prioritizes user understanding by allowing them to explore the complex lemmatization process step-by-step. Other sections are presented in clean, well-formatted blocks for easy readability. -->
+    <!-- Visualization & Content Choices: Content is presented via structured HTML sections and tables for clear display of examples. The "How it Works" section uses interactive clickable divs and a modal for detailed explanations to enhance engagement with the process flow. No Chart.js/Plotly.js used as the content is descriptive and procedural. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #EAE4F5; /* Lighter purple background for Cornell alignment */
+            color: #3C3633; /* Dark readable text */
+        }
+        /* Cornell College Inspired Accent: Deep Purple */
+        .bg-accent { background-color: #4A1A70; }
+        .text-accent { color: #4A1A70; }
+        .border-accent { border-color: #4A1A70; }
+        .bg-main { background-color: #EAE4F5; /* Matches body background */ }
+        .text-main { color: #3C3633; }
+        .text-light { color: #605a56; }
+
+        /* Main title on the purple background */
+        #main-title h1 {
+            color: #3C3633; /* White for the main title */
+        }
+
+        /* Header and Navigation adjustments for dark background */
+        header#header {
+            background-color: #4A1A70; /* Deep purple header */
+        }
+        header#header h1 {
+            color: #FFFFFF; /* White title in header */
+        }
+        header#header nav a, header#header #mobile-menu a {
+            color: #FDFBF6; /* Light text for navigation links */
+        }
+        header#header nav a:hover, header#header #mobile-menu a:hover {
+            color: #EAE4F5; /* Slightly lighter on hover */
+        }
+        header#mobile-menu-button {
+            color: #FDFBF6; /* White for mobile menu icon */
+        }
+
+
+        /* Flowchart styling */
+        .flowchart-step {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            @apply shadow-lg border border-gray-200 hover:shadow-xl hover:translate-y-[-4px];
+        }
+        .flowchart-line {
+            width: 2px;
+            background-color: #92908E; /* Gray for lines */
+            @apply mx-auto;
+        }
+        .flowchart-arrow {
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid #92908E; /* Gray for arrow */
+            @apply mx-auto;
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s forwards;
+            padding: 1rem; /* Added padding for mobile */
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s forwards;
+            @apply border-t-4 border-accent;
+        }
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #3C3633;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Table styling - Enhanced for more distinct borders, centered text */
+        table {
+            @apply w-full table-auto border-collapse;
+        }
+        th, td {
+            border: 1px solid #C0C0C0; /* Thinner and lighter border for distinct boxes */
+            @apply px-5 py-3 text-center; /* Centered text */
+        }
+        th {
+            @apply bg-gray-100 font-semibold text-main;
+        }
+        tr:nth-child(even) {
+            @apply bg-gray-50;
+        }
+        tr:hover {
+            @apply bg-gray-100;
+        }
+
+        /* Responsive adjustments for tables */
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            tr {
+                @apply mb-4 border rounded-lg;
+            }
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+                text-align: right; /* Keep right alignment for content but left for label on mobile */
+            }
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 45%;
+                padding-left: 15px;
+                font-weight: bold;
+                text-align: left; /* Label itself remains left-aligned */
+                white-space: nowrap;
+            }
+        }
+
+        /* Code Block Styling */
+        pre {
+            background-color: #2D2D2D; /* Dark background for code */
+            color: #F8F8F2; /* Light text for code */
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            tab-size: 4;
+            -moz-tab-size: 4;
+            white-space: pre-wrap; /* Ensure wrapping for long lines */
+            word-wrap: break-word; /* Ensure wrapping for long lines */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="bg-main/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-accent">Gaelic Lemmatizer</h1>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#introduction" class="text-light hover:text-accent transition">Introduction</a>
+                <a href="#getting-started" class="text-light hover:text-accent transition">Process Flow</a>
+                <a href="#demonstration" class="text-light hover:text-accent transition">Demonstration</a>
+                <a href="#code-snippets" class="text-light hover:text-accent transition">Code Snippets</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-main">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#introduction" class="block py-2 px-6 text-light hover:bg-gray-100">Introduction</a>
+            <a href="#getting-started" class="block py-2 px-6 text-light hover:bg-gray-100">Process Flow</a>
+            <a href="#demonstration" class="block py-2 px-6 text-light hover:bg-gray-100">Demonstration</a>
+            <a href="#code-snippets" class="block py-2 px-6 text-light hover:bg-gray-100">Code Snippets</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <!-- Main Title -->
+        <section id="main-title" class="text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Vignette: Understanding the </h1>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Scottish Gaelic Lemmatizer</h1>
+            <p class="text-lg md:text-xl text-light max-w-3xl mx-auto">A practical overview of our research project's core component for Scottish Gaelic NLP.</p>
+        </section>
+
+        <!-- Introduction -->
+        <section id="introduction" class="mb-24 scroll-mt-24 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+            <h2 class="text-3xl font-bold text-accent mb-6">Introduction</h2>
+            <p class="text-lg text-light mb-4">
+                Welcome to this vignette on the Scottish Gaelic Lemmatizer, a key component of our collaborative CSRI research project. This document aims to provide a practical overview of how our lemmatizer works, highlighting its core features: preprocessing, the use of an irregular dictionary, and its novel POS-aware rule application.
+            </p>
+            <p class="text-lg text-light">
+                Our lemmatizer's primary goal is to reduce inflected Scottish Gaelic word forms to their base lemmas, enabling deeper linguistic analysis. We'll walk through various examples to demonstrate its capabilities.
+            </p>
+        </section>
+
+        <!-- Getting Started: The Lemmatization Process -->
+        <section id="getting-started" class="mb-24 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-center mb-6 text-accent">Getting Started: The Lemmatization Process</h2>
+            <p class="text-center text-lg text-light mb-12 max-w-3xl mx-auto">
+                The lemmatizer operates as a custom component within a spaCy pipeline. For each word (token) it encounters, it follows a specific sequence of operations. Click on any step below to see a detailed explanation.
+            </p>
+            <div class="flex flex-col items-center max-w-3xl mx-auto">
+                <!-- Step 1 -->
+                <div id="flow-step-1" class="flowchart-step bg-white p-6 rounded-lg w-full md:w-3/4 text-center border-l-4 border-accent mb-4"
+                    data-title="1. Initial Irregular Check"
+                    data-content="The first and highest-priority check is against a manually curated dictionary of irregular forms. If the raw token text (e.g., 'chunnaic') is found in this dictionary, its lemma ('faic') is assigned immediately, and all other rules are skipped. This ensures true exceptions are always handled correctly.">
+                    <p class="font-semibold text-main">Initial Irregular Check</p>
+                </div>
+                <div class="flowchart-line h-8 mb-4"></div>
+                <div class="flowchart-arrow mb-4"></div>
+
+                <!-- Step 2 -->
+                <div id="flow-step-2" class="flowchart-step bg-white p-6 rounded-lg w-full md:w-3/4 text-center border-l-4 border-accent mb-4"
+                    data-title="2. Preprocessing"
+                    data-content="If not an initial irregular, the word undergoes a series of preprocessing steps: acute accents are normalized to grave, emphatic suffixes (-sa, -se, -san, -ne) are removed, hyphenated prosthetic consonants (t-, h-, n-) are stripped, and lenition markers (second 'h' for b,c,d,f,g,m,p,s,t) are removed. This normalizes the word form for subsequent rule application (e.g., 'chuala' becomes 'cuala', 'bhean' becomes 'bean').">
+                    <p class="font-semibold text-main">Preprocessing</p>
+                </div>
+                <div class="flowchart-line h-8 mb-4"></div>
+                <div class="flowchart-arrow mb-4"></div>
+
+                <!-- Step 3 -->
+                <div id="flow-step-3" class="flowchart-step bg-white p-6 rounded-lg w-full md:w-3/4 text-center border-l-4 border-accent mb-4"
+                    data-title="3. Post-Preprocessing Irregular Check"
+                    data-content="After preprocessing, the word is checked against the irregular dictionary a second time. This is crucial for words that become irregular only after their initial phonetic or orthographic variations are removed (e.g., 'chuala' is preprocessed to 'cuala', which then matches the irregular entry for 'cluinn').">
+                    <p class="font-semibold text-main">Post-Preprocessing Irregular Check</p>
+                </div>
+                <div class="flowchart-line h-8 mb-4"></div>
+                <div class="flowchart-arrow mb-4"></div>
+
+                <!-- Step 4 -->
+                <div id="flow-step-4" class="flowchart-step bg-white p-6 rounded-lg w-full md:w-3/4 text-center border-l-4 border-accent mb-4"
+                    data-title="4. POS-Aware Suffix Rules"
+                    data-content="This is the core rule-based application. If the word's POS tag (e.g., NOUN, VERB, ADJ) is known, the lemmatizer applies specific suffix removal or transformation rules. This context-awareness prevents incorrect lemmatization (e.g., a noun-specific plural rule won't apply to a verb that just happens to end similarly). Rules are ordered from longest to shortest within each POS category to ensure precision.">
+                    <p class="font-semibold text-main">POS-Aware Suffix Rules</p>
+                </div>
+                <div class="flowchart-line h-8 mb-4"></div>
+                <div class="flowchart-arrow mb-4"></div>
+
+                <!-- Step 5 -->
+                <div id="flow-step-5" class="flowchart-step bg-white p-6 rounded-lg w-full md:w-3/4 text-center border-l-4 border-accent"
+                    data-title="5. Fallback & Finalization"
+                    data-content="If a word is not an irregular form and no POS-specific suffix rule applies (or if no POS tag is available), the lemmatizer defaults to using the preprocessed form of the word as its lemma. A final length check ensures that no lemma is reduced to an unintended single character, reverting to the original raw text if necessary to preserve data integrity for very short words.">
+                    <p class="font-semibold text-main">Fallback & Finalization</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal for Flowchart Details -->
+        <div id="flowchartModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h3 id="modalTitle" class="text-2xl font-bold text-accent mb-4"></h3>
+                <p id="modalContent" class="text-lg text-light"></p>
+            </div>
+        </div>
+
+        <!-- Demonstration: Core Lemmatization Features -->
+        <section id="demonstration" class="mb-24 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-center mb-12 text-accent">Demonstration: Core Lemmatization Features</h2>
+
+            <!-- Preprocessing in Action -->
+            <h3 class="text-2xl font-semibold text-main mb-6">1. Preprocessing in Action</h3>
+            <p class="text-light mb-8">Preprocessing is the first line of defense, normalizing the word before deeper lemmatization.</p>
+
+            <h4 class="text-xl font-medium text-main mb-4">Example 1: Lenition Removal</h4>
+            <div class="overflow-x-auto mb-8 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Original Word</th>
+                            <th>Preprocessing Step</th>
+                            <th>Preprocessed Word</th>
+                            <th>Assigned POS</th>
+                            <th>Final Lemma</th>
+                            <th>Explanation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Original Word">`bhean`</td>
+                            <td data-label="Preprocessing Step">Remove 'h'</td>
+                            <td data-label="Preprocessed Word">`bean`</td>
+                            <td data-label="Assigned POS">NOUN</td>
+                            <td data-label="Final Lemma">`bean`</td>
+                            <td data-label="Explanation">The lenition marker 'h' is removed from the initial consonant cluster, revealing the base form `bean` (woman).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="text-xl font-medium text-main mb-4">Example 2: Prosthetic Consonants (Simulated)</h4>
+            <div class="overflow-x-auto mb-16 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Original Word</th>
+                            <th>Preprocessing Step</th>
+                            <th>Preprocessed Word</th>
+                            <th>Assigned POS</th>
+                            <th>Final Lemma</th>
+                            <th>Explanation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Original Word">`an t-òran`</td>
+                            <td data-label="Preprocessing Step">Remove 't-' prefix</td>
+                            <td data-label="Preprocessed Word">`òran`</td>
+                            <td data-label="Assigned POS">NOUN</td>
+                            <td data-label="Final Lemma">`òran`</td>
+                            <td data-label="Explanation">Prosthetic 't-' (often found after definite articles) is removed to get the base noun `òran` (song).</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Original Word">`na h-uile`</td>
+                            <td data-label="Preprocessing Step">Remove 'h-' prefix</td>
+                            <td data-label="Preprocessed Word">`uile`</td>
+                            <td data-label="Assigned POS">ADJ</td>
+                            <td data-label="Final Lemma">`uile`</td>
+                            <td data-label="Explanation">Prosthetic 'h-' (often before vowels) is removed to get the base adjective `uile` (all, every).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Handling Irregular Forms -->
+            <h3 class="text-2xl font-semibold text-main mb-6">2. Handling Irregular Forms</h3>
+            <p class="text-light mb-8">Irregular words are handled by a dedicated dictionary, overriding any rule-based attempts.</p>
+
+            <h4 class="text-xl font-medium text-main mb-4">Example 3: Irregular Verbs</h4>
+            <div class="overflow-x-auto mb-8 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Original Word</th>
+                            <th>Preprocessing Step</th>
+                            <th>Preprocessed Word</th>
+                            <th>Assigned POS</th>
+                            <th>Final Lemma</th>
+                            <th>Explanation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Original Word">`chunnaic`</td>
+                            <td data-label="Preprocessing Step">(None applicable)</td>
+                            <td data-label="Preprocessed Word">`chunnaic`</td>
+                            <td data-label="Assigned POS">VERB</td>
+                            <td data-label="Final Lemma">`faic`</td>
+                            <td data-label="Explanation">A common, highly irregular verb form directly mapped to `faic` (to see).</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Original Word">`chuala`</td>
+                            <td data-label="Preprocessing Step">Remove 'h'</td>
+                            <td data-label="Preprocessed Word">`cuala`</td>
+                            <td data-label="Assigned POS">VERB</td>
+                            <td data-label="Final Lemma">`cluinn`</td>
+                            <td data-label="Explanation">Lenition removed, then the preprocessed `cuala` is matched to `cluinn` (to hear).</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Original Word">`ràinig`</td>
+                            <td data-label="Preprocessing Step">(None applicable)</td>
+                            <td data-label="Preprocessed Word">`ràinig`</td>
+                            <td data-label="Assigned POS">VERB</td>
+                            <td data-label="Final Lemma">`ruig`</td>
+                            <td data-label="Explanation">An irregular past tense form mapped to `ruig` (to reach).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="text-xl font-medium text-main mb-4">Example 4: Irregular Nouns (Genitive Case)</h4>
+            <div class="overflow-x-auto mb-16 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Original Word</th>
+                            <th>Preprocessing Step</th>
+                            <th>Preprocessed Word</th>
+                            <th>Assigned POS</th>
+                            <th>Final Lemma</th>
+                            <th>Explanation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Original Word">`ciùil`</td>
+                            <td data-label="Preprocessing Step">(None applicable)</td>
+                            <td data-label="Preprocessed Word">`ciùil`</td>
+                            <td data-label="Assigned POS">NOUN</td>
+                            <td data-label="Final Lemma">`ceòl`</td>
+                            <td data-label="Explanation">The genitive form `ciùil` (of music) has a stem change from `ceòl` (music), so it's handled as an irregular.</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Original Word">`eaglaise`</td>
+                            <td data-label="Preprocessing Step">(None applicable)</td>
+                            <td data-label="Preprocessed Word">`eaglaise`</td>
+                            <td data-label="Assigned POS">NOUN</td>
+                            <td data-label="Final Lemma">`eaglais`</td>
+                            <td data-label="Explanation">The genitive form `eaglaise` (of a church) maps to `eaglais` (church) via an irregular entry.</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Original Word">`sgìrean`</td>
+                            <td data-label="Preprocessing Step">(None applicable)</td>
+                            <td data-label="Preprocessed Word">`sgìrean`</td>
+                            <td data-label="Assigned POS">NOUN</td>
+                            <td data-label="Final Lemma">`sgìre`</td>
+                            <td data-label="Explanation">Although appearing like a regular plural, `sgìrean` (areas) has an underlying base form `sgìre` (area) making it an effective irregular.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- POS-Aware Suffix Rules -->
+            <h3 class="text-2xl font-semibold text-main mb-6">3. POS-Aware Suffix Rules</h3>
+            <p class="text-light mb-8">This is where the lemmatizer's intelligence truly shines. Rules are applied only if the POS tag matches, preventing incorrect transformations.</p>
+
+            <h4 class="text-xl font-medium text-main mb-4">Example 5: Preventing Mis-Lemmatization (ADJ vs. VERB Suffix)</h4>
+            <div class="overflow-x-auto mb-8 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Original Word</th>
+                            <th>Preprocessing Step</th>
+                            <th>Preprocessed Word</th>
+                            <th>Assigned POS</th>
+                            <th>Final Lemma</th>
+                            <th>Explanation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Original Word">`ruadh`</td>
+                            <td data-label="Preprocessing Step">(None applicable)</td>
+                            <td data-label="Preprocessed Word">`ruadh`</td>
+                            <td data-label="Assigned POS">ADJ</td>
+                            <td data-label="Final Lemma">`ruadh`</td>
+                            <td data-label="Explanation">Tagged as an ADJECTIVE (`ruadh` - red). The lemmatizer will *not* apply verb rules (e.g., trying to remove `adh`) because its POS is not VERB, correctly preserving its base form.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="text-xl font-medium text-main mb-4">Example 6: Regular Noun Plural</h4>
+            <div class="overflow-x-auto mb-8 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Original Word</th>
+                            <th>Preprocessing Step</th>
+                            <th>Preprocessed Word</th>
+                            <th>Assigned POS</th>
+                            <th>Final Lemma</th>
+                            <th>Explanation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Original Word">`lochan`</td>
+                            <td data-label="Preprocessing Step">(None applicable)</td>
+                            <td data-label="Preprocessed Word">`lochan`</td>
+                            <td data-label="Assigned POS">NOUN</td>
+                            <td data-label="Final Lemma">`loch`</td>
+                            <td data-label="Explanation">Tagged as a NOUN. The general `-an` plural rule is applied, yielding `loch` (loch/lake).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="text-xl font-medium text-main mb-4">Example 7: Verbal Noun Transformation</h4>
+            <div class="overflow-x-auto mb-8 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Original Word</th>
+                            <th>Preprocessing Step</th>
+                            <th>Preprocessed Word</th>
+                            <th>Assigned POS</th>
+                            <th>Final Lemma</th>
+                            <th>Explanation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Original Word">`atharrachadh`</td>
+                            <td data-label="Preprocessing Step">(None applicable)</td>
+                            <td data-label="Preprocessed Word">`atharrachadh`</td>
+                            <td data-label="Assigned POS">VERB</td>
+                            <td data-label="Final Lemma">`atharraich`</td>
+                            <td data-label="Explanation">Tagged as a VERB. The `-eachadh` verbal noun rule correctly transforms it to the base verb `atharraich` (to change).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="text-xl font-medium text-main mb-4">Example 8: Past Participle (Verb-derived)</h4>
+            <div class="overflow-x-auto mb-16 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Original Word</th>
+                            <th>Preprocessing Step</th>
+                            <th>Preprocessed Word</th>
+                            <th>Assigned POS</th>
+                            <th>Final Lemma</th>
+                            <th>Explanation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Original Word">`aonaichte`</td>
+                            <td data-label="Preprocessing Step">(None applicable)</td>
+                            <td data-label="Preprocessed Word">`aonaichte`</td>
+                            <td data-label="Assigned POS">VERB</td>
+                            <td data-label="Final Lemma">`aonaich`</td>
+                            <td data-label="Explanation">Tagged as a VERB (derived from verb). The `-te` participle rule correctly transforms it to the base verb `aonaich` (to unite).</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Original Word">`sgrìobhta`</td>
+                            <td data-label="Preprocessing Step">(None applicable)</td>
+                            <td data-label="Preprocessed Word">`sgrìobhta`</td>
+                            <td data-label="Assigned POS">VERB</td>
+                            <td data-label="Final Lemma">`sgrìobh`</td>
+                            <td data-label="Explanation">Tagged as a VERB (derived from verb). The `-ta` participle rule correctly transforms it to the base verb `sgrìobh` (to write).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- New Section: Code Snippets -->
+        <section id="code-snippets" class="mb-24 scroll-mt-24">
+            <h2 class="text-3xl font-bold text-center mb-12 text-accent">Code Snippets: How it Works</h2>
+            <p class="text-center text-lg text-light mb-12 max-w-3xl mx-auto">
+                Here are the core Python code snippets from the `pos_aware_lemmatizer.py` script, illustrating the functions that power the lemmatization process.
+            </p>
+
+            <!-- Preprocessing Function Code -->
+            <h3 class="text-2xl font-semibold text-main mb-6">4.1 Preprocessing Function</h3>
+            <p class="text-light mb-4">
+                The `preprocess_gaelic_word` function normalizes word forms by handling accents, emphatic suffixes, prosthetic consonants, and lenition. This prepares the word for accurate rule application.
+            </p>
+            <pre><code class="language-python">
+# --- PREPROCESSING FUNCTION ---
+def preprocess_gaelic_word(word):
+    """
+    Applies preprocessing to a Scottish Gaelic word.
+
+    Steps:
+    1. Convert to lowercase and replace acute accents with grave ones.
+    2. Remove hyphenated emphatic suffixes (-sa, -se, -san, -ne).
+    3. Remove hyphenated prosthetic consonants (t-, h-, n-).
+
+    Args:
+        word (str): The input Scottish Gaelic word.
+
+    Returns:
+        str: The preprocessed word.
+    """
+    # 1. Convert to lowercase and replace acute accents with grave accents
+    acute_to_grave = {
+        'á': 'à', 'é': 'è', 'í': 'ì', 'ó': 'ò', 'ú': 'ù',
+        'Á': 'À', 'É': 'È', 'Í': 'Ì', 'Ó': 'Ò', 'Ú': 'Ù',
+        'ʼ': '`'
+    }
+    word = ''.join(acute_to_grave.get(c, c) for c in word.lower())
+
+    # 2. Remove hyphenated emphatic suffixes only
+    emphatic_suffixes = ['-sa', '-se', '-san', '-ne']
+    for suffix in emphatic_suffixes:
+        if word.endswith(suffix) and len(word) > len(suffix):
+            word = word[:-len(suffix)]
+            break  # Assume only one emphatic suffix will be present
+
+    # 3. Remove prosthetic consonants (t-, h-, n-) if followed by a hyphen
+    # E.g., t-each -> each, h-uile -> uile, n-adharc -> adharc
+    if word.startswith(("t-", "h-", "n-")):
+        word = word[2:]
+
+    # 4. Remove dh’ at the beginning
+    if re.match(r"^dh[’']", word):
+        word = word[3:]
+
+    # 5. Remove lenition (second letter 'h')
+    # This is a broad rule and might affect words where 'h' is not lenition
+    # (e.g., 'thig' becomes 'tig').
+    if len(word) > 2 and word[1] == 'h':
+        word = word[0] + word[2:]
+
+    return word
+            </code></pre>
+
+            <!-- Irregular Dictionary Loading Code -->
+            <h3 class="text-2xl font-semibold text-main mb-6 mt-12">4.2 Irregular Dictionary Loading</h3>
+            <p class="text-light mb-4">
+                The `irregulars` dictionary is loaded at the start of the script. This dictionary stores pre-defined irregular word-lemma pairs, ensuring that exceptions to the rule-based system are handled with highest priority.
+            </p>
+            <pre><code class="language-python">
+# --- LOAD IRREGULAR DICTIONARY ---
+irregulars = {}
+try:
+    with open("irregular_dict.json", "r", encoding="utf-8") as f:
+        irregulars = json.load(f)
+except FileNotFoundError:
+    print("Warning: irregular_dict.json not found. Lemmatizer will not use irregular forms.")
+    irregulars = {}
+except json.JSONDecodeError:
+    print("Warning: Could not decode irregular_dict.json. Check its format.")
+    irregulars = {}
+            </code></pre>
+
+            <!-- Suffix Rule Helper Functions Code -->
+            <h3 class="2xl font-semibold text-main mb-6 mt-12">4.3 Suffix Rule Helper Functions</h3>
+            <p class="text-light mb-4">
+                These small helper functions are used by the main lemmatizer component to perform common suffix-related transformations.
+            </p>
+            <pre><code class="language-python">
+# --- DEFINE SUFFIX RULE FUNCTIONS ---
+def remove_suffix(word, suffix_len):
+    """Helper to remove a suffix if word is long enough."""
+    if len(word) > suffix_len:
+        return word[:-suffix_len]
+    return word
+
+def change_in_to_an(word):
+    """Specific rule for 'in' to 'an' transformation."""
+    if len(word) > 2:
+        return word[:-2] + "an"
+    return word
+            </code></pre>
+
+            <!-- Custom POS-Aware Rule-Based Lemmatizer Component Core Logic -->
+            <h3 class="text-2xl font-semibold text-main mb-6 mt-12">4.4 Core Lemmatizer Component Logic</h3>
+            <p class="text-light mb-4">
+                The `gaelic_lemmatizer_pos_aware` component is where the main lemmatization logic resides, applying irregular lookups, preprocessing, and crucially, POS-aware suffix rules.
+            </p>
+            <pre><code class="language-python">
+# --- CUSTOM POS-AWARE RULE-BASED LEMMATIZER COMPONENT ---
+@Language.component("gaelic_lemmatizer_pos_aware")
+def gaelic_lemmatizer_pos_aware(doc):
+    """
+    Custom rule-based lemmatizer for Scottish Gaelic, leveraging POS tags.
+
+    Processing Order:
+    1. Irregular dictionary lookup (highest priority).
+    2. General preprocessing (accents, hyphenated affixes).
+    3. POS-specific suffix rules.
+    4. Fallback to preprocessed or original if no rule applies.
+    5. Final length check.
+    """
+    for token in doc:
+        raw_text = token.text.lower() # Start with lowercased raw text
+        token.lemma_ = raw_text       # Initialize lemma with original text
+
+        # Retrieve POS tags from the token
+        upos = token.pos_ # Universal POS tag (e.g., "NOUN", "VERB", "ADJ")
+        xpos = token.tag_ # Fine-grained POS tag (e.g., "Nouns", "Verbs")
+
+        # 1. Irregular dictionary lookup (HIGHEST PRIORITY)
+        if raw_text in irregulars:
+            token.lemma_ = irregulars[raw_text]
+            continue # Skip all other rules for irregulars
+
+        # 2. General Preprocessing
+        preprocessed = preprocess_gaelic_word(raw_text)
+        # If preprocessing makes it identical to an irregular form, use that
+        if preprocessed in irregulars and irregulars[preprocessed] == preprocessed:
+             token.lemma_ = preprocessed
+             continue # Stop here if it became an irregular base form
+
+        # 3. Irregular dictionary lookup (SECOND PRIORITY - after preprocessing)
+        if preprocessed in irregulars:
+            token.lemma_ = irregulars[preprocessed]
+            continue  # Skip remaining rules for this token
+
+        # 4. POS-INFORMED SUFFIX-BASED LEMMATIZATION
+        lemma_applied_by_rule = False
+
+        if upos == "NOUN":
+            # Noun-specific rules (longest suffixes first)
+            if preprocessed.endswith("aichean"):
+                token.lemma_ = remove_suffix(preprocessed, 7)
+                lemma_applied_by_rule = True
+            elif preprocessed.endswith("annan"):
+                token.lemma_ = remove_suffix(preprocessed, 5)
+                lemma_applied_by_rule = True
+            # ... (other noun rules)
+
+        elif upos == "VERB":
+            # Verb-specific rules (tenses, moods, verbal nouns, imperatives, passives)
+            if preprocessed.endswith("eachadh"):
+                token.lemma_ = remove_suffix(preprocessed, 7) + "ich" # Correct this length to 6 if needed
+                lemma_applied_by_rule = True
+            elif preprocessed.endswith("achadh"):
+                token.lemma_ = remove_suffix(preprocessed, 6) + "aich"
+                lemma_applied_by_rule = True
+            # ... (other verb rules)
+
+        elif upos == "ADJ":
+            # Adjective-specific rules
+            if preprocessed.endswith("ach") and not lemma_applied_by_rule:
+                token.lemma_ = raw_text
+                lemma_applied_by_rule = True
+            # ... (other adjective rules)
+
+        # 5. Fallback Logic: If no specific POS rule applied, and preprocessing changed the word, use preprocessed.
+        if not lemma_applied_by_rule and preprocessed != raw_text:
+            token.lemma_ = preprocessed
+
+        # 6. Final Lemma Length Check: Revert if lemma is too short (1 char or less)
+        if len(token.lemma_) <= 1 and token.lemma_ != irregulars.get(raw_text):
+            token.lemma_ = raw_text
+
+    return doc
+            </code></pre>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const flowchartSteps = document.querySelectorAll('.flowchart-step');
+            const modal = document.getElementById('flowchartModal');
+            const closeButton = document.querySelector('.close-button');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            const navLinks = document.querySelectorAll('nav a, #mobile-menu a');
+
+            // Mobile menu toggle
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Smooth scrolling for navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - (window.innerWidth < 768 ? 60 : 80), // Adjust for sticky header height
+                            behavior: 'smooth'
+                        });
+                        // Close mobile menu after clicking a link
+                        if (!mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+
+            // Flowchart step interaction (open modal)
+            flowchartSteps.forEach(step => {
+                step.addEventListener('click', () => {
+                    modalTitle.textContent = step.dataset.title;
+                    modalContent.textContent = step.dataset.content;
+                    modal.style.display = 'block';
+                });
+            });
+
+            // Close modal button
+            closeButton.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            // Close modal when clicking outside content
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Handle Escape key to close modal
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Add data-label to table cells for responsive display
+            document.querySelectorAll('table th').forEach((header, index) => {
+                const label = header.textContent;
+                document.querySelectorAll(`table td:nth-of-type(${index + 1})`).forEach(cell => {
+                    cell.setAttribute('data-label', label);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

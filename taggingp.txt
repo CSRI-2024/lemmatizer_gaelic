@@ -1,0 +1,20 @@
+NO TAG PART OF SPEECH
+    1 Ap Adjective, predicative
+    2 Apc Adjective, predicative, comparative or superlative
+    3 Aps Adjective, predicative, second comparative
+    4 Nn Noun, common
+    5 Vb Verb, base form
+    6 Pp Preposition, general
+    7 Prn Pronoun, personal
+    8 Co Conjunction
+    9 Adverb Adverb, general
+    10 AdjC Adjective, comparative
+    11 NpN Noun, proper, plural
+    12 Vbg Verb, gerund
+    13 Prx Pronoun, reflexive
+    93 Nn-fv Noun, name, feminine, vocative
+    100 Vb-inf Verb, infinitive
+    101 Adj-ord Adjective, ordinal
+    102 Prp-loc Preposition, locative
+    103 Nn-masc Noun, common, masculine
+    

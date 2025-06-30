@@ -384,3 +384,6 @@ if __name__ == "__main__":
     print(f"Total words unchanged: {unchanged}")
     print(f"Total words processed: {total_processed_count}")
     print(f"\nResults saved to: {output_file_name}")
+
+    import matplotlib.pyplot as plt  # Import matplotlib for plotting
+    from collections import Counter  # Import Counter for frequency counting
