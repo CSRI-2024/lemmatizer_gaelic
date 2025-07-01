@@ -14,7 +14,7 @@ import json
 import re # Import regex for more robust preprocessing
 
 
-# --- PREPROCESSING FUNCTION ---
+# PREPROCESSING FUNCTION
 def preprocess_gaelic_word(word):
     """
     Applies preprocessing to a Scottish Gaelic word.
@@ -77,7 +77,7 @@ except json.JSONDecodeError:
     irregulars = {}
 
 
-# --- DEFINE SUFFIX RULE FUNCTIONS ---
+# DEFINE SUFFIX RULE FUNCTIONS
 def remove_suffix(word, suffix_len):
     """Helper to remove a suffix if word is long enough."""
     if len(word) > suffix_len:
@@ -161,7 +161,6 @@ def gaelic_lemmatizer_pos_aware(doc):
             # Add other noun rules here
 
 
-
         elif upos == "VERB":
             # Verb-specific rules (tenses, moods, verbal nouns, imperatives, passives)
             # Longest suffixes first
@@ -237,17 +236,12 @@ def gaelic_lemmatizer_pos_aware(doc):
                 lemma_applied_by_rule = True
 
 
-
         elif upos == "ADJ":
             # Adjective-specific rules
             # 'ach' suffix for adjectives: typically indicates a base adjective, so keep it.
             # (Advisor Note: Albannach -> Albannach correctly handled here)
             if preprocessed.endswith("ach") and not lemma_applied_by_rule:
                 token.lemma_ = raw_text # Keep original as it's likely the base form
-                lemma_applied_by_rule = True
-            # Example: Slenderization (bige -> beag) - if not in irregulars (Advisor Note: specific example covered)
-            elif raw_text == "bige":
-                token.lemma_ = "beag"
                 lemma_applied_by_rule = True
             # Add other adjective rules (e.g., comparative/superlative forms)
             elif preprocessed.endswith("ta"):
@@ -263,9 +257,9 @@ def gaelic_lemmatizer_pos_aware(doc):
         if not lemma_applied_by_rule and preprocessed != raw_text:
             token.lemma_ = preprocessed
 
-        # 5. Final Lemma Length Check: Revert if lemma is too short (1 char or less)
+        # 5. Final Lemma Length Check: Revert if lemma is too short (2 char or less)
         # AND it's not an irregular form (which might be intentionally short).
-        if len(token.lemma_) <= 1 and token.lemma_ != irregulars.get(raw_text):
+        if len(token.lemma_) <= 2 and token.lemma_ != irregulars.get(raw_text):
             token.lemma_ = raw_text
 
     return doc
@@ -275,7 +269,7 @@ def gaelic_lemmatizer_pos_aware(doc):
 nlp.add_pipe("gaelic_lemmatizer_pos_aware", name="gaelic_lemmatizer_pos_aware", last=True)
 
 
-# --- EXAMPLE USAGE AND OUTPUT GENERATION (Similar to old code, but frequency-aware) ---
+# EXAMPLE USAGE AND OUTPUT GENERATION (Similar to old code, but frequency-aware)
 if __name__ == "__main__":
     # This block runs only when pos_aware_lemmatizer.py is executed directly.
     # When imported by test_lemmatizer_pos_aware.py, this block is skipped.
@@ -287,7 +281,7 @@ if __name__ == "__main__":
     frequency_list_path = "Top500Words.txt" # Words ordered by frequency
     output_file_name = "lemmatized_output_pos_aware_example.txt"
 
-    # --- LOAD POS DATA INTO A LOOKUP DICTIONARY ---
+    # LOAD POS DATA INTO A LOOKUP DICTIONARY
     pos_lookup = {} # {word: {'upos': 'NOUN', 'xpos': 'Nouns'}, ...}
     try:
         with open(pos_data_json_path, "r", encoding="utf-8") as f:
@@ -301,7 +295,7 @@ if __name__ == "__main__":
         print(f"Error: Could not decode {pos_data_json_path}. Check its JSON format.")
         exit()
 
-    # --- LOAD WORDS IN FREQUENCY ORDER ---
+    # LOAD WORDS IN FREQUENCY ORDER
     words_to_process_ordered = []
     try:
         with open(frequency_list_path, "r", encoding="utf-8") as f:
@@ -373,7 +367,7 @@ if __name__ == "__main__":
             print(f"{original_word:<6} ->  {current_lemma:<7} | {assigned_upos:<7} ")
             out.write(f"{original_word} -> {current_lemma}\n")
 
-    # --- SUMMARY OUTPUT ---
+    # SUMMARY OUTPUT
     print("\nSummary of Lemmatization Changes (POS-Aware, Frequency-Ordered):")
     print("-" * 55)
     print(f"Words changed by irregular dictionary: {changed_by_irregular}")
@@ -385,5 +379,3 @@ if __name__ == "__main__":
     print(f"Total words processed: {total_processed_count}")
     print(f"\nResults saved to: {output_file_name}")
 
-    import matplotlib.pyplot as plt  # Import matplotlib for plotting
-    from collections import Counter  # Import Counter for frequency counting
