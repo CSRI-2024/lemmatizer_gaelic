@@ -15,6 +15,8 @@ body {
   color: #222;
   font-size: 16px;
   overflow-x: hidden;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 img {
@@ -27,7 +29,7 @@ img {
   width: 90%;
   max-width: 1200px;
   margin: auto;
-  padding: 2rem ;
+  padding: 2rem;
 }
 
 /* Header */
@@ -37,31 +39,16 @@ header {
   padding: 2rem;
 }
 
-.header-text h1 {
-  font-size: 2.4rem;
-  font-weight: 700;
-  color: white;
-  display: inline-block;
-  border-bottom: 2px solid white;
-  padding-bottom: 0.3rem;
-  margin-bottom: 0.5rem;
-  white-space: nowrap; /* ⬅️ Prevent line break */
-  overflow: hidden;
-  text-overflow: ellipsis; /* Optional: handle overflow gracefully */
-}
-
 .header-flex {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
   gap: 2rem;
 }
 
 .logo-container,
-.header-text,
 .github-link {
-  flex: 1;
+  flex-shrink: 0;
 }
 
 .logo {
@@ -70,7 +57,7 @@ header {
 }
 
 .github-link img {
-  height: 60px;
+  height: 80px !important;
   width: auto;
   transition: transform 0.2s ease;
   float: right;
@@ -81,24 +68,27 @@ header {
 }
 
 .header-text {
+  flex-grow: 1;
   text-align: center;
+  min-width: 200px;
 }
 
 .header-text h1 {
-  font-size: 2.4rem;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
   font-weight: 700;
   color: white;
-  display: inline-block;
+  display: block;
   border-bottom: 2px solid white;
   padding-bottom: 0.3rem;
   margin-bottom: 0.5rem;
 }
 
 .header-text .subtitle {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
   color: white;
   opacity: 1;
   margin-top: 0.4rem;
+  text-align: center;
 }
 
 /* Tabs */
@@ -124,6 +114,7 @@ header {
   border-radius: 30px;
   cursor: pointer;
   transition: all 0.3s ease;
+  min-height: 44px;
 }
 
 .tab:hover {
@@ -133,6 +124,11 @@ header {
 .tab.active {
   background-color: #582C83;
   color: white;
+}
+
+.tab:focus {
+  outline: 2px solid #582C83;
+  outline-offset: 3px;
 }
 
 /* Tab Panels */
@@ -171,12 +167,13 @@ p {
   margin-bottom: 1.3rem;
   color: #333;
   line-height: 1.8;
+  text-align: left;
 }
 
 /* Project Overview Section */
 .overview-paragraph {
-  text-align: justify;
   margin-bottom: 2rem;
+  padding: 0 0.5rem;
 }
 
 .overview-image {
@@ -217,9 +214,9 @@ p {
 }
 
 .profile-text p {
-  text-align: justify;
   font-size: 1.05rem;
   color: #333;
+  padding: 0 0.5rem;
 }
 
 .profile-side {
@@ -242,25 +239,103 @@ p {
   color: #666;
 }
 
+/* References Section */
+.references-container {
+  background-color: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  margin-top: 1rem;
+}
+
+.references-container h2 {
+  font-size: 1.8rem;
+  color: #582C83;
+  margin-bottom: 1rem;
+}
+
+.section-divider {
+  border: none;
+  height: 2px;
+  background-color: #e0e0e0;
+  margin: 0.5rem 0 1.5rem 0;
+}
+
+.references-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.references-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 1.2rem;
+  font-size: 1.05rem;
+  color: #333;
+  line-height: 1.75;
+}
+
+.references-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #582C83;
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
 /* Footer */
 footer {
   background-color: #f4f4f4;
   border-top: 1px solid #ccc;
-  padding: 1.5rem 0;
-  text-align: center;
+  padding: 1.5rem 1rem;
   font-size: 0.95rem;
   color: #444;
+  text-align: center;
+}
+
+footer .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-  .header-text h1 {
-    font-size: 1.8rem;
+  .header-flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .logo-container,
+  .github-link {
+    width: 100%;
+    text-align: center;
+  }
+
+  .github-link img {
+    float: none;
+    height: 70px !important;
+  }
+
+  .header-text {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .tab-buttons {
+    flex-direction: column;
   }
 
   .tab {
     font-size: 0.95rem;
     padding: 0.5rem 1rem;
+    width: 100%;
   }
 
   .profile-container {

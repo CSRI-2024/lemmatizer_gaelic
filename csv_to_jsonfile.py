@@ -20,7 +20,7 @@ UPOS_MAPPING = {
     "Others": "X"  # For miscellaneous/unknown
 }
 
-# --- SCRIPT TO PROCESS CSV ---
+# SCRIPT TO PROCESS CSV
 processed_words_data = []
 
 try:
