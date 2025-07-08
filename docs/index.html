@@ -28,19 +28,23 @@
 
     <!-- Mobile layout -->
     <div class="container header-mobile">
+      <a href="https://www.cornellcollege.edu/index.shtml" target="_blank" title="View Cornell College">
       <img src="pictures/CClogo.png" alt="Cornell College Logo" class="logo" />
+      </a>
       <div class="header-text">
         <h1>Scottish Gaelic Research Project</h1>
         <p class="subtitle">A CSRI Linguistics Research Project</p>
       </div>
+       <a href="https://github.com/CSRI-2024" target="_blank" title="View GitHub Repository">
       <img src="pictures/gitpic1.png" alt="GitHub Logo" class="mobile-github-logo" />
+       </a>
     </div>
   </header>
 
   <main class="container" role="main">
     <section class="tabs" aria-label="Main Sections">
       <div class="tab-buttons" role="tablist">
-        <button class="tab active" onclick="openTab('intro')" role="tab">Intro</button>
+        <button class="tab active" onclick="openTab('intro')" role="tab">Introduction</button>
         <button class="tab" onclick="openTab('past')" role="tab">Past Students</button>
         <button class="tab" onclick="openTab('current')" role="tab">Current Students</button>
         <button class="tab" onclick="openTab('advisors')" role="tab">Advisors</button>
@@ -61,20 +65,48 @@
           </p>
         </section>
 
-        <section id="past" class="tab-panel" role="tabpanel">
-          <h2>Past Students' Contributions</h2>
+        <section id="past" class="tab-panel active" role="tabpanel">
+      <h2>Past Students' Contributions</h2>
+      <p>
+        The first phase of the Scottish Gaelic research project established the foundation for future development. Last year’s CSRI team compiled one of the first digital corpora for the language and built a web scraper and custom tokenizer.. These tools addressed Gaelic-specific challenges like lenition and compound word formation. The team contributed their work to spaCy and presented it at Napier University, strengthening cross-continental collaboration.
+      </p>
+
+
+      <div class="profile-container">
+        <div class="profile-text">
+          <h2>Mark Liberko</h2>
           <p>
-            The first phase of the Scottish Gaelic research project laid the critical groundwork for all current and future development. Last year’s CSRI students successfully built one of the first digital corpora dedicated to Scottish Gaelic by compiling text from a wide range of written sources. From there, the team designed a custom tokenizer and developed a part-of-speech tagger tailored to the unique morphological and syntactic structures of the language.
+            Mark played a central role in the creation of the custom tokenizer for Scottish Gaelic. He worked closely on designing tokenization rules that address Gaelic-specific challenges such as lenition and affixation. In addition to his work on tokenization, Mark collaborated with Sophie on the scraping pipeline and contributed to the integration of tools within the spaCy NLP framework.
           </p>
+        </div>
+        <div class="profile-side">
+          <img src="pictures/liberko1.jpeg" alt="Mark Liberko" />
+          <p class="photo-caption">Mark is a senior studying Data Science and Mathematics at Cornell College.</p>
+        </div>
+      </div>
+
+      <div class="profile-container">
+        <div class="profile-text">
+          <h2>Sophie Brown</h2>
           <p>
-            These tools addressed key challenges such as lenition, affixation, and compound word formation, helping to create a more accurate and language-specific NLP pipeline. In a major milestone, the team contributed their work to the open-source NLP library spaCy, expanding its support for low-resource Celtic languages. They also presented their findings to Napier University, fostering a transatlantic academic partnership.
+            Sophie developed the original web scraper that collected and processed Gaelic language texts from a variety of sources. Their contribution ensured that the dataset was diverse and representative, which laid the foundation for building a reliable corpus. They also worked alongside Mark to implement scraping logic and pre-annotation filtering.
           </p>
-        </section>
+        </div>
+        <div class="profile-side">
+          <img src="pictures/brown1.jpg" alt="Sophie Brown" />
+          <p class="photo-caption">Sophie is a Cornell College Alum, who received a Mathematics degree with a Statistics Minor .</p>
+        </div>
+      </div>
+    </section>
 
         <section id="current" class="tab-panel" role="tabpanel">
+          <h2>Current Students' Contributions</h2>
+      <p>
+            This year’s CSRI students are expanding the project’s scope by developing custom NLP tools and infrastructure for Scottish Gaelic. Their work includes building a rule-based lemmatizer, cleaning and enriching the corpus, and designing a Scottish Gaelic past-of-speech tagger. Together, they’re advancing the project’s accuracy, coverage, and accessibility.
+      </p>
           <div class="profile-container">
             <div class="profile-text">
-              <h2>Zack’s Work</h2>
+              <h2>Zack Orrick</h2>
               <p>
                 Zack is focused on foundational work to clean and expand the Scottish Gaelic text corpus. He has written scripts in R to preprocess and tokenize raw text from various historical and contemporary sources, ensuring quality and consistency. His preprocessing pipeline helps reduce noise and makes the dataset more useful for downstream NLP applications.
               </p>
@@ -90,7 +122,7 @@
 
           <div class="profile-container">
             <div class="profile-text">
-              <h2>Oskar’s Work</h2>
+              <h2>Oskar Diyali</h2>
               <p>
                 Oskar is leading development of a rule-based lemmatizer tailored for Scottish Gaelic using Python and spaCy. His pipeline accounts for Gaelic morphology: accent normalization, lenition, emphatic/prosthetic removal, and suffix transformation to derive base forms.
               </p>
@@ -106,7 +138,7 @@
 
           <div class="profile-container">
             <div class="profile-text">
-              <h2>Kaede’s Work</h2>
+              <h2>Kaede Saho</h2>
               <p>
                 Kaede contributes to building a Gaelic Data Analytics API, working remotely with faculty at Cornell and Napier. She is designing a tool to identify Scottish Gaelic text — foundational for scaling linguistic analysis across our corpus. This detection tool is critical for applying rule-based lemmatization and syntactic tools reliably.
               </p>
