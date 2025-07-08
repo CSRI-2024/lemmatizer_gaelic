@@ -57,7 +57,7 @@ header {
 }
 
 .github-link img {
-  height: 80px !important;
+  height: 80px;
   width: auto;
   transition: transform 0.2s ease;
   float: right;
@@ -295,27 +295,37 @@ footer {
   padding: 1.5rem 1rem;
   font-size: 0.95rem;
   color: #444;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
 }
 
 footer .container {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .header-flex {
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    text-align: center;
+    gap: 1rem;
   }
 
   .logo-container,
   .github-link {
-    width: 100%;
+    width: auto;
     text-align: center;
+  }
+
+  .logo {
+    height: 80px;
   }
 
   .github-link img {
@@ -326,6 +336,15 @@ footer .container {
   .header-text {
     width: 100%;
     min-width: unset;
+    text-align: center;
+  }
+
+  .header-text h1 {
+    font-size: 1.8rem;
+  }
+
+  .header-text .subtitle {
+    font-size: 1rem;
   }
 
   .tab-buttons {
