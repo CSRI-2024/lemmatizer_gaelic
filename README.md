@@ -2,14 +2,35 @@
 
 This project is part of an ongoing collaborative research initiative between the **Cornell College Computer Science Department** and **Napier University** in Edinburgh, Scotland. The goal is to build tools that enable deeper text analysis for the **Scottish Gaelic language** — a low-resource language with limited computational tools.
 
----
 
-## Project Context
-
-- **Year 1**: A team of students created a cleaned corpus of Scottish Gaelic text and a tokenizer.
-- **Year 2 (Current)**: Focused on developing a rule-based lemmatizer, generating word frequency statistics, and implementing preprocessing techniques specific to Scottish Gaelic grammar and spelling.
+It integrates directly with **spaCy**, making Scottish Gaelic NLP processing accessible to researchers, educators, and developers anywhere in the world.
 
 ---
+
+## Project Overview
+
+This work is part of a multi-year research collaboration between:
+
+- **Cornell College – Computer Science & Data Science**
+- **Edinburgh Napier University – Languages & NLP**
+
+**Year 1 (2023–2024):**
+- Built a cleaned corpus  
+- Created a Gaelic tokenizer  
+- Developed preprocessing tools and scraping pipelines  
+
+**Year 2 (2024–2025):**
+- Built a rule-based + POS-aware lemmatizer  
+- Published the pipeline to **PyPI**  
+- Added accent normalization, lenition handling, prosthetic removal, suffix rules  
+- Integrated a lightweight POS tagger  
+- Created evaluation + benchmarking scripts  
+- Constructed irregular dictionaries and frequency-driven refinement methods  
+
+This project supports **low-resource language revitalization** by providing tools normally unavailable for Gaelic.
+
+---
+
 
 ## What This Tool Does
 
@@ -26,17 +47,15 @@ This lemmatizer reduces inflected Scottish Gaelic word forms to their base forms
 ## Tree-like Folder Structure
 
 ```
-lemmatizer_gaelic/
-├── lemmatizer.py                       # Main lemmatization script using spaCy custom component
-├── irregular_dict.json                 # Irregular word → lemma mappings
-├── Latest_Corpus.txt                   # Cleaned corpus with "word source" format
-├── lemmatized_output.txt               # Output from previous lemmatizer version / reference output
-├── lemmatized_output_pos_aware_example.txt # Example output from the new POS-aware lemmatizer
-├── compare_lemmas.py                   # Script to compare two lemmatizer output files
-├── word_frequency.py                   # Word frequency analysis script (by source)
-├── stopWords.txt                       # List of Gaelic stop words (excluded from stats)
-├── CorpusBySource.py                   # Exports per-source texts from the raw corpus
-└── README.md                           # Project documentation
+gd_core_web_sm/
+├── config.cfg                # spaCy pipeline config
+├── meta.json                 # spaCy model metadata
+├── lookups/                  # irregular dict & rulesets
+├── models/                   # tagger model + vectors
+├── tokenizer/                # tokenizer data
+├── pos_aware_lemmatizer.py   # main rule-based lemmatizer
+└── README.md                 # this file
+
 ```
 
 
@@ -126,16 +145,9 @@ Print summary:
 
 ---
 
-### 4. **Word Frequency Analysis (`word_frequency.py`)**
-- Computes the top 100 most frequent words by source
-- Excludes stopwords (`stopWords.txt`)
-- Guides rule updates and dictionary development
-
----
-
 ## Future Work
 
-- Integrate a robust Gaelic POS tagger to improve lemmatizer accuracy
+- Improve Gaelic POS tagger lemmatization accuracy
 - Expand suffix rules and irregulars using linguistic input from Napier University
 - Group frequent words by part of speech (noun, verb, adj) for better rule targeting
 - Evaluate lemmatizer accuracy using a manually verified gold standard
@@ -143,6 +155,6 @@ Print summary:
 ---
 
 ## Status
+Active Development - Dec 2025
 
-**Work in Progress — June 2025**
 
