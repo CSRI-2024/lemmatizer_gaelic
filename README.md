@@ -147,7 +147,7 @@ Print summary:
 
 ## Quickstart: Using the Scottish Gaelic Lemmatizer (`gd_core_web_sm`)
 
-The `gd_core_web_sm` package provides a fully integrated Scottish Gaelic NLP pipeline, including a rule-based lemmatizer, lightweight POS tagger, and Gaelic-specific preprocessing (lenition, accents, emphatics, prosthetics). This Quickstart shows how to install, load, and use the model effectively. Note: Note: `gd_core_web_sm` is an independently developed model and is not an official spaCy model.
+The `gd_core_web_sm` package provides a fully integrated Scottish Gaelic NLP pipeline, including a rule-based lemmatizer, lightweight POS tagger, and Gaelic-specific preprocessing (lenition, accents, emphatics, prosthetics). This Quickstart shows how to install, load, and use the model effectively. ### Note: `gd_core_web_sm` is an independently developed model and is not an official spaCy model.
 
 ---
 
