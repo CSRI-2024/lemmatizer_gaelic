@@ -1,0 +1,376 @@
+/* =======================
+   RESET
+   ======================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* =======================
+   BASE STYLING
+   ======================= */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  background-color: #ffffff;
+  color: #222;
+  font-size: 16px;
+  overflow-x: hidden;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 2rem;
+}
+
+/* =======================
+   HEADER
+   ======================= */
+header {
+  background-color: #582C83;
+  color: #fff;
+  padding: 2rem;
+}
+
+.header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.logo-container,
+.github-link {
+  flex-shrink: 0;
+}
+
+.logo {
+  height: 100px;
+  width: auto;
+}
+
+.github-link img {
+  height: 80px;
+  width: auto;
+  transition: transform 0.2s ease;
+}
+
+.github-link img:hover {
+  transform: scale(1.05);
+}
+
+.header-text {
+  flex-grow: 1;
+  text-align: center;
+  min-width: 200px;
+}
+
+.header-text h1 {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 700;
+  color: white;
+  border-bottom: 2px solid white;
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.header-text .subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  color: white;
+  opacity: 1;
+  margin-top: 0.4rem;
+}
+
+.header-mobile {
+  display: none;
+}
+
+/* =======================
+   TABS
+   ======================= */
+.tabs {
+  margin-top: 2rem;
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tab {
+  background-color: #f0f0f0;
+  border: 2px solid #582C83;
+  color: #582C83;
+  padding: 0.7rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 44px;
+}
+
+.tab:hover {
+  background-color: #ddd0ec;
+}
+
+.tab.active {
+  background-color: #582C83;
+  color: white;
+}
+
+.tab:focus {
+  outline: 2px solid #582C83;
+  outline-offset: 3px;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =======================
+   HEADINGS & PARAGRAPHS
+   ======================= */
+h2 {
+  color: #582C83;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0.3rem;
+  display: inline-block;
+}
+/* Remove underline from h2 inside Lemmatizer Guide */
+#lemmatizer h2 {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0.8rem;
+}
+/* Spacing between Lemmatizer Guide sections */
+#lemmatizer h2,
+#lemmatizer h3 {
+  margin-top: 2rem;   /* space BEFORE each section */
+}
+
+#lemmatizer h2:first-child,
+#lemmatizer h3:first-child {
+  margin-top: 0;      /* keep the first heading tight */
+}
+
+p {
+  font-size: 1.05rem;
+  margin-bottom: 1.3rem;
+  color: #333;
+  line-height: 1.8;
+  text-align: left;
+}
+
+.overview-paragraph {
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+}
+
+.overview-image {
+  text-align: center;
+  margin: 2.5rem 0;
+}
+
+.overview-image img {
+  border: 2px solid #eee;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* =======================
+   PROFILES
+   ======================= */
+.profile-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 3rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-top: 1px solid #ddd;
+  padding-top: 2rem;
+}
+
+.profile-text {
+  flex: 2;
+  min-width: 300px;
+}
+
+.profile-text h2 {
+  font-size: 1.6rem;
+  color: #582C83;
+  margin-bottom: 0.8rem;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 0.3rem;
+}
+
+.profile-side {
+  flex: 1;
+  min-width: 220px;
+  max-width: 220px;
+  text-align: center;
+}
+
+.profile-side img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0.8rem;
+}
+
+.photo-caption {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* =======================
+   REFERENCES / BOX SECTIONS
+   ======================= */
+.references-container {
+  background-color: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  margin-top: 1rem;
+}
+
+.references-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.references-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 1.2rem;
+  font-size: 1.05rem;
+  color: #333;
+  line-height: 1.75;
+}
+
+.references-list li::before {
+  content: "\2022";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #582C83;
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* =======================
+   CODE BLOCKS (VIGNETTE STYLE)
+   ======================= */
+pre {
+  background: #0b1220;
+  color: #e5e7eb;
+  padding: 1.2rem 1.4rem;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-family: "SF Mono", Consolas, Monaco, monospace;
+  font-size: 0.95rem;
+  margin: 1.4rem 0 2rem;
+  line-height: 1.5;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+/* =======================
+   FOOTER
+   ======================= */
+footer {
+  background-color: #f4f4f4;
+  border-top: 1px solid #ccc;
+  padding: 1.5rem 1rem;
+  font-size: 0.95rem;
+  color: #444;
+  text-align: center;
+}
+
+/* =======================
+   RESPONSIVE
+   ======================= */
+@media (max-width: 768px) {
+  .header-flex {
+    display: none;
+  }
+
+  .header-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem 0;
+  }
+
+  .header-mobile .logo {
+    height: 80px;
+  }
+
+  .mobile-github-logo {
+    height: 60px;
+  }
+
+  .tab-buttons {
+    flex-direction: column;
+  }
+
+  .tab {
+    width: 100%;
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .profile-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-text,
+  .profile-side {
+    max-width: 100%;
+  }
+
+  .profile-side img {
+    margin: auto;
+  }
+}
