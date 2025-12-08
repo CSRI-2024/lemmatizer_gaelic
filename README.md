@@ -77,7 +77,7 @@ gd_core_web_sm/
 
 ---
 
-### 3. **Lemmatization Logic (`lemmatizer.py`)**
+### 3. **Lemmatization Logic **
 
 - Apply preprocessing to each token
 - If token exists in irregular dictionary → use its mapped lemma
@@ -142,6 +142,51 @@ Print summary:
   ├─ Total changed / unchanged words
   └─ Total operations applied
 ```
+
+---
+
+## Quickstart: Using the Scottish Gaelic Lemmatizer (`gd_core_web_sm`)
+
+The `gd_core_web_sm` package provides a fully integrated Scottish Gaelic NLP pipeline, including a rule-based lemmatizer, lightweight POS tagger, and Gaelic-specific preprocessing (lenition, accents, emphatics, prosthetics). This Quickstart shows how to install, load, and use the model effectively.
+
+---
+
+### Installation
+
+```bash
+pip install spacy
+pip install gd-core-web-sm
+```
+A successful load means the model is ready for lemmatization and POS tagging.
+
+### Token-Level Lemmatization
+
+Example Code:
+```
+import spacy
+nlp = spacy.load("gd_core_web_sm")
+
+text = "Chunnaic mi e agus chuala mi i."
+doc = nlp(text)
+
+for token in doc:
+    print(f"{token.text:<12} → {token.lemma_:<12} ")
+
+```
+
+Output:
+```
+Chunnaic     → faic
+mi           → mi
+e            → e
+agus         → agus
+chuala       → cluinn
+mi           → mi
+i            → i
+.            → .            
+
+```
+
 
 ---
 
