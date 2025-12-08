@@ -54,7 +54,6 @@ gd_core_web_sm/
 ├── models/                   # tagger model + vectors
 ├── tokenizer/                # tokenizer data
 ├── pos_aware_lemmatizer.py   # main rule-based lemmatizer
-└── README.md                 # this file
 
 ```
 
