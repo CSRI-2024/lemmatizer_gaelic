@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scottish Gaelic Project | Cornell College</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header role="banner">
+    <!-- Desktop layout -->
+    <div class="container header-flex">
+      <div class="logo-container">
+        <a href="https://www.cornellcollege.edu/index.shtml" target="_blank" title="View Cornell College">
+          <img src="pictures/CClogo.png" alt="Cornell College Logo" class="logo" />
+        </a>
+      </div>
+
+      <div class="header-text">
+        <h1>Scottish Gaelic Research Project</h1>
+        <p class="subtitle">A CSRI Linguistics Research Project</p>
+      </div>
+
+      <nav class="github-link" aria-label="GitHub">
+        <a href="https://github.com/CSRI-2024" target="_blank" title="View GitHub Repository">
+          <img src="pictures/gitpic1.png" alt="GitHub Repository Link" />
+        </a>
+      </nav>
+    </div>
+
+    <!-- Mobile layout -->
+    <div class="container header-mobile">
+      <a href="https://www.cornellcollege.edu/index.shtml" target="_blank">
+        <img src="pictures/CClogo.png" alt="Cornell Logo" class="logo" />
+      </a>
+      <div class="header-text">
+        <h1>Scottish Gaelic Research Project</h1>
+        <p class="subtitle">A CSRI Linguistics Research Project</p>
+      </div>
+      <a href="https://github.com/CSRI-2024" target="_blank">
+        <img src="pictures/gitpic1.png" alt="GitHub Logo" class="mobile-github-logo" />
+      </a>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    <section class="tabs" aria-label="Main Sections">
+      <div class="tab-buttons" role="tablist">
+        <button class="tab active" onclick="openTab('intro')" role="tab">Introduction</button>
+        <button class="tab" onclick="openTab('past')" role="tab">Past Students</button>
+        <button class="tab" onclick="openTab('current')" role="tab">Current Students</button>
+        <button class="tab" onclick="openTab('lemmatizer')" role="tab">Lemmatizer Guide</button>
+        <button class="tab" onclick="openTab('advisors')" role="tab">Advisors</button>
+        <button class="tab" onclick="openTab('references')" role="tab">References</button>
+      </div>
+
+      <!-- ================================
+           ALL TAB PANELS MUST BE INSIDE HERE
+           ================================ -->
+      <div class="tab-content">
+
+        <!-- INTRO -->
+        <section id="intro" class="tab-panel active" role="tabpanel">
+          <h2>Project Overview</h2>
+          <p class="overview-paragraph">
+            The Scottish Gaelic Research Project at Cornell College is an interdisciplinary initiative that bridges linguistics and computer science to support endangered language revitalization. Our team focuses on developing tools for automatic lemmatization, part-of-speech tagging, and morphological analysis tailored to the complexities of Scottish Gaelic. Unlike many mainstream NLP projects, we face the unique challenges of low-resource languages, which often lack large annotated corpora. By collaborating with native speakers and Gaelic scholars, we ensure that our models respect the linguistic and cultural integrity of the language. The project has become a hands-on platform for undergraduate research, contributing to both academic knowledge and practical digital tools for the Gaelic-speaking community.
+           </p>
+
+          <div class="overview-image">
+            <img src="pictures/GaelicImage1.png" alt="Gaelic NLP pipeline" />
+          </div>
+
+          <p class="overview-paragraph">
+            Our current work includes designing a custom rule-based lemmatizer that handles affix stripping, prosthetic consonants, and Gaelic-specific grammatical structures. We also incorporate manual tagging and evaluation to refine our preprocessing rules, helping to increase accuracy and reduce bias in automated analyses. Students like Zack and Kaede are exploring advanced tasks such as corpus coverage assessment and syntactic parsing, enriching the project’s scope. Meanwhile, Oskar is developing the Python codebase that brings all our components together — from preprocessing to lexicon integration and visualization. Altogether, this project exemplifies how small liberal arts colleges can contribute to globally significant work through focused, collaborative research.
+          </p>
+        </section>
+
+        <!-- PAST STUDENTS -->
+        <section id="past" class="tab-panel" role="tabpanel">
+          <h2>Past Students' Contributions</h2>
+          <p>
+            Last year’s CSRI team compiled one of the first digital corpora for the language and built a web scraper and custom tokenizer. These tools addressed Gaelic-specific challenges like lenition and compound word formation. The team contributed their work to spaCy and presented it at Napier University, strengthening cross-continental collaboration. Their work can be accessed on <a href="https://github.com/CSRI-2024" target="_blank" rel="noopener">GitHub</a>.
+          </p>
+
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Mark Liberko</h2>
+              <p>Mark played a central role in the creation of the custom tokenizer for Scottish Gaelic. He worked closely on designing tokenization rules that address Gaelic-specific challenges such as lenition and affixation. In addition to his work on tokenization, Mark collaborated with Sophie on the scraping pipeline and contributed to the integration of tools within the spaCy NLP framework.
+          </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/liberko1.jpeg" alt="Mark Liberko" />
+              <p class="photo-caption">Mark is a senior studying Data Science.</p>
+            </div>
+          </div>
+
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Sophie Brown</h2>
+              <p>Sophie developed the original web scraper that collected and processed Gaelic language texts from a variety of sources. Their contribution ensured that the dataset was diverse and representative, which laid the foundation for building a reliable corpus. They also worked alongside Mark to implement scraping logic and pre-annotation filtering.
+         </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/brown1.jpg" alt="Sophie Brown" />
+              <p class="photo-caption">Cornell Mathematics alum.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- CURRENT STUDENTS -->
+        <section id="current" class="tab-panel" role="tabpanel">
+          <h2>Current Students' Contributions</h2>
+
+          <p>This year’s CSRI students are expanding the project’s scope by developing custom NLP tools and infrastructure for Scottish Gaelic. Their work includes building a rule-based lemmatizer, cleaning and enriching the corpus, and designing a Scottish Gaelic past-of-speech tagger. Together, they’re advancing the project’s accuracy, coverage, and accessibility. The team has presented their work to advisors in Napier University and working on contributing their work to spaCy, strengthening cross-continental collaboration. Their work can be accessed on <a href="https://github.com/CSRI-2024" target="_blank" rel="noopener">GitHub</a>.
+     </p>
+
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Zack Orrick</h2>
+              <p>Zack is focused on foundational work to clean and expand the Scottish Gaelic text corpus. He has written scripts in R to preprocess and tokenize raw text from various historical and contemporary sources, ensuring quality and consistency. His pipeline reduces noise and improves the dataset’s utility for downstream NLP applications. A distinctive part of his work involves building timelines that organize corpus material chronologically, helping the team analyze historical language evolution, while also sourcing new Gaelic texts to enrich the corpus’s diversity.
+             </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/zack1.jpg" alt="Zack Orrick" />
+              <p class="photo-caption">Senior Data Science student.</p>
+            </div>
+          </div>
+
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Oskar Diyali</h2>
+              <p>Oskar is leading development of a rule-based lemmatizer tailored for Scottish Gaelic using Python and spaCy. His pipeline accounts for Gaelic morphology through accent normalization, lenition handling, emphatic and prosthetic removal, and suffix transformation to derive base forms. He has also built frequency analyses, irregular lemma dictionaries, and output evaluation systems, with the goal of expanding rule coverage and launching a public-facing site to share findings and tools for Gaelic NLP.
+              </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/oskar2.png" alt="Oskar Diyali" />
+              <p class="photo-caption">Junior Data Science & Computer Science.</p>
+            </div>
+          </div>
+
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Kaede Saho</h2>
+              <p>Kaede contributes to building a Part-of-Speech Prediction Model using Neural Network, working with faculty at Cornell and Napier. She is designing a tool to identify tags for Scottish Gaelic text — a foundation for scaling linguistic analysis and applying rule-based lemmatization and syntactic tools reliably. Using both rule-based and statistical methods, she builds classifiers and analyzes lexical and grammatical patterns, even without speaking Gaelic. Her work boosts accessibility for underrepresented languages and supports reproducible NLP workflows.
+             </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/Kaedepic.png" alt="Kaede" />
+              <p class="photo-caption">Junior CS & DS student.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="lemmatizer" class="tab-panel" role="tabpanel">
+
+  <h2>Scottish Gaelic Lemmatizer (<code>gd_core_web_sm</code>)</h2>
+
+  <p>
+    The <strong>gd_core_web_sm</strong> model is a custom Scottish Gaelic NLP pipeline built using
+    <strong>spaCy</strong>. It provides tokenization, part-of-speech prediction, and a rule-based
+    lemmatizer tailored to the morphology of Scottish Gaelic. The model is designed for
+    low-resource language research, classroom use, and large-scale text processing.
+  </p>
+
+  <ul>
+    <li> Fast rule-based lemmatizer for Gaelic</li>
+    <li> Lightweight POS tagger</li>
+    <li> Handles lenition, accents, dh’ forms, suffix stripping</li>
+    <li> No GPU required</li>
+    <li> Easy to install and use anywhere</li>
+  </ul>
+
+  <hr>
+
+  <h2>1. Installation</h2>
+
+  <p>Install spaCy and the model:</p>
+
+  <pre><code>pip install spacy
+pip install gd-core-web-sm</code></pre>
+
+  <p>Load the model:</p>
+
+  <pre><code>import spacy
+nlp = spacy.load("gd_core_web_sm")</code></pre>
+
+  <hr>
+
+  <h2>2. What the Lemmatizer Does</h2>
+
+  <p>
+    Lemmatization reduces a word to its <strong>dictionary base form</strong>.
+    The Gaelic lemmatizer applies linguistic rules such as lenition reversal,
+    prosthetic removal, accent normalization, and irregular verb mapping.
+  </p>
+
+  <table style="width:100%; border-collapse: collapse; margin: 1rem 0;">
+    <tr>
+      <th style="text-align:left; padding:6px; border-bottom:1px solid #ccc;">Input</th>
+      <th style="text-align:left; padding:6px; border-bottom:1px solid #ccc;">Lemma</th>
+      <th style="text-align:left; padding:6px; border-bottom:1px solid #ccc;">POS</th>
+    </tr>
+    <tr><td style="padding:6px;">Chunnaic</td><td>faic</td><td>VERB</td></tr>
+    <tr><td style="padding:6px;">chuala</td><td>cluinn</td><td>VERB</td></tr>
+    <tr><td style="padding:6px;">thàinig</td><td>thig</td><td>VERB</td></tr>
+    <tr><td style="padding:6px;">balaich</td><td>balaich</td><td>NOUN</td></tr>
+  </table>
+
+  <p>Key transformations:</p>
+
+  <ul>
+    <li><strong>Lenition handling:</strong> ch-, bh-, gh-, fh- → root recovery</li>
+    <li><strong>Prosthetic consonants:</strong> dh’ → removed (e.g., dh’òl → òl)</li>
+    <li><strong>Accent normalization:</strong> ensures canonical base forms</li>
+    <li><strong>Suffix rules:</strong> plural → singular, verb endings → roots</li>
+    <li><strong>Irregular verbs:</strong> stored in a custom lookup dictionary</li>
+  </ul>
+
+  <hr>
+
+  <h2>3. Token-Level Inspection</h2>
+
+  <p>A simple example on how the lemmatizer works:</p>
+
+  <pre><code>import spacy
+nlp = spacy.load("gd_core_web_sm")
+
+text = "Chunnaic mi e agus chuala mi i."
+doc = nlp(text)
+
+for token in doc:
+    print(f"{token.text:<12} → {token.lemma_:<12} ")</code></pre>
+
+  <p><strong>Expected Output:</strong></p>
+
+  <pre><code>Chunnaic     → faic
+mi           → mi
+e            → e
+agus         → agus
+chuala       → cluinn
+mi           → mi
+i            → i
+.            → .            </code></pre>
+
+  <hr>
+
+  <h2>4. Lemmatize Full Text</h2>
+
+  <p>A helper function that returns a reconstructed lemmatized string (like an R text pipeline):</p>
+
+  <pre><code>def lemmatize_text(text):
+    doc = nlp(text)
+    return "".join(token.lemma_ + token.whitespace_ for token in doc)
+
+print(lemmatize_text("Chunnaic mi e agus chuala mi i."))</code></pre>
+
+  <p><strong>Output:</strong></p>
+  <pre><code>faic mi e agus cluinn mi i.</code></pre>
+
+
+
+  <h2>5. Performance</h2>
+
+  <ul>
+    <li>≈ 17,000 tokens/sec on a MacBook Pro</li>
+    <li>Works efficiently on large corpora</li>
+    <li>Pure Python, no GPU required</li>
+    <li>No PyTorch dependency needed</li>
+  </ul>
+
+  <hr>
+
+  <h2>6. When to Use This Model</h2>
+
+  <ul>
+    <li> Gaelic NLP research</li>
+    <li> Linguistically accurate lemmatization</li>
+    <li> Preprocessing for corpus studies</li>
+    <li> Classroom instruction on minority language NLP</li>
+    <li> Rapid prototyping of Gaelic digital tools</li>
+  </ul>
+
+  <hr>
+
+  <h2>7. Source Code & Contributions</h2>
+
+  <p>
+    The full model, rule-based system, and build scripts are available on GitHub:
+  </p>
+
+  <p>
+     <a href="https://github.com/CSRI-2024/lemmatizer_gaelic" target="_blank">
+      github.com/CSRI-2024/lemmatizer_gaelic
+    </a>
+  </p>
+
+  <p>
+    Contributions are welcome, especially for rule expansion, POS tagging improvements,
+    irregular verb coverage, and evaluation datasets.
+  </p>
+
+</section>
+
+
+        <!-- ADVISORS -->
+        <section id="advisors" class="tab-panel" role="tabpanel">
+          <h2>Advisors</h2>
+
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Dr. Tyler George</h2>
+              <p>Dr. George is an Assistant Professor of Statistics who teaches introductory and advanced statistics courses including Introduction to Time Series and Advanced Regression Analysis. His professional interests lie in data science, analytics, hypothesis testing, and statistics education. He holds a Ph.D. in Statistics and Analytics from Central Michigan University.
+             </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/tyler1.png" alt="Dr. Tyler George" />
+            </div>
+          </div>
+
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Dr. Ajit Chavan</h2>
+              <p>Dr. Chavan is an Associate Professor of Computer Science at Cornell College. He teaches courses ranging from Data Structures and Algorithms to Computer Organization and Operating Systems. His research interests include parallel and distributed systems, big data applications, and machine learning infrastructure.
+              </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/ajit1.png" alt="Dr. Ajit Chavan" />
+            </div>
+          </div>
+
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Dr. Peter Barclay</h2>
+              <p>Dr. Barclay is a lecturer at Edinburgh Napier University, specializing in NLP and corpus linguistics. He has contributed to several digital humanities and computational linguistics projects, focusing particularly on low-resource languages like Scottish Gaelic. His work bridges linguistics and computer science in innovative ways.
+              </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/petesample1.png" alt="Dr. Peter Barclay" />
+            </div>
+          </div>
+
+          <div class="profile-container">
+            <div class="profile-text">
+              <h2>Dr. Alistair Lawson</h2>
+              <p>Dr. Lawson is a lecturer at Edinburgh Napier University with expertise in software engineering, machine learning, and digital tools for minority languages. He contributes to interdisciplinary research supporting Gaelic technology, educational systems, and student-led innovation in computational linguistics.
+              </p>
+            </div>
+            <div class="profile-side">
+              <img src="pictures/alistair1.jpg" alt="Dr. Alistair Lawson" />
+            </div>
+          </div>
+        </section>
+
+        <!-- REFERENCES -->
+        <section id="references" class="tab-panel" role="tabpanel">
+          <h2>References & Acknowledgments</h2>
+          <ul>
+            <li>DASG – Source corpus</li>
+            <li>Napier University – Linguistic guidance</li>
+            <li>spaCy – NLP framework</li>
+            <li>Am Faclair Beag – Lexicon validation</li>
+            <li>Cornell College Faculty – Research supervision</li>
+            <li>Internet Archive – Historical texts</li>
+            <li>ARCOSG – POS tagging references</li>
+          </ul>
+        </section>
+
+      </div> <!-- END OF TAB CONTENT -->
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Cornell College | Designed by Oskar Diyali</p>
+  </footer>
+
+  <script>
+    function openTab(tabId) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      [...document.querySelectorAll('.tab')].find(b => b.textContent.toLowerCase().includes(tabId)).classList.add('active');
+    }
+  </script>
+</body>
+</html>
